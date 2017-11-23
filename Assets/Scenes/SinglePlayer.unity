@@ -819,12 +819,12 @@ Prefab:
     - target: {fileID: 224981389143044916, guid: f8654641abdd7f844a6c79634d0058d6,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224981389143044916, guid: f8654641abdd7f844a6c79634d0058d6,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224643299130831532, guid: f8654641abdd7f844a6c79634d0058d6,
         type: 2}
@@ -839,12 +839,12 @@ Prefab:
     - target: {fileID: 224511671639883598, guid: f8654641abdd7f844a6c79634d0058d6,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224511671639883598, guid: f8654641abdd7f844a6c79634d0058d6,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f8654641abdd7f844a6c79634d0058d6, type: 2}
@@ -4764,7 +4764,7 @@ RectTransform:
   - {fileID: 731963951}
   - {fileID: 1462093448}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10399,7 +10399,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4475072450990634, guid: c539f192805ec0f4abdbffb3ebd2cd34, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c539f192805ec0f4abdbffb3ebd2cd34, type: 2}
@@ -11371,7 +11371,6 @@ GameObject:
   - component: {fileID: 1816822763}
   - component: {fileID: 1816822762}
   - component: {fileID: 1816822761}
-  - component: {fileID: 1816822760}
   - component: {fileID: 1816822759}
   - component: {fileID: 1816822758}
   - component: {fileID: 1816822771}
@@ -11422,19 +11421,6 @@ MonoBehaviour:
   moveDelay: 0.6
   dashSpeed: 30
   lungeDistance: 100
---- !u!114 &1816822760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114459966928582748, guid: 96edf2a7e4f44674ab66f95272470580,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1816822757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1fceb841f4cedb4a91a0af3fd08891d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controlNo: 1
 --- !u!114 &1816822761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11707,7 +11693,7 @@ RectTransform:
   - {fileID: 1840051361}
   - {fileID: 1601874790}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

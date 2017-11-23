@@ -5371,6 +5371,7 @@ MonoBehaviour:
   airAttackAudio: {fileID: 8300000, guid: 8a7b9c6736f5cf3428daeae06bc4cd3e, type: 3}
   playerHypeHit: {fileID: 8300000, guid: f2851143447e8b943b2270c8e7038a53, type: 3}
   hypeAttackAudio: {fileID: 8300000, guid: 7ad1dddd6a9b3904ea68fd549400939e, type: 3}
+  walkingSFX: {fileID: 0}
 --- !u!114 &114431776236592776
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5409,12 +5410,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfa39a1409f3e054187c48fcc2eaa1b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dashDelayLength: 0
   fallMultipler: 0
   jumpHeight: 35
   speed: 60
   knockBackDistance: 500
   lastAttack: 0
   moveDelay: 1.5
+  dashSpeed: 0
   lungeDistance: 100
 --- !u!114 &114456119065920894
 MonoBehaviour:
@@ -5429,8 +5432,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hypeAttackHitBox: {fileID: 65902832106064260}
   attackHitBox: {fileID: 65443354822576952}
+  knockBackHitBox: {fileID: 0}
   torso: {fileID: 65426523384320896}
   blockArea: {fileID: 65735595121210148}
+  delaySeconds: 0
 --- !u!114 &114490635068091830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5443,6 +5448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDelay: 0.5
+  resetDelay: 0
+  attackDelayMultiplier: 0
 --- !u!114 &114532869229744250
 MonoBehaviour:
   m_ObjectHideFlags: 1
