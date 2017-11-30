@@ -15,6 +15,8 @@ public class MainMenu : MonoBehaviour
     private Button quitButton;
     [SerializeField]
     private GameObject nav;
+    [SerializeField]
+    private Vector2 defaultPosition;
 
     private void Awake()
     {
@@ -24,6 +26,12 @@ public class MainMenu : MonoBehaviour
     private void Update()
     {
         PauseControls();
+    }
+
+    private Vector2 SetDefaultPosition(Vector2 _defaultPosition)
+    {
+
+        return defaultPosition;
     }
     public void LoadLevel(string level)
     {
@@ -73,6 +81,7 @@ public class MainMenu : MonoBehaviour
             else if (nav.transform.position == multiplayer)
             {
                 //LoadLevel("RingMap");
+
                 SceneManager.LoadScene("RingMap");
             }
             

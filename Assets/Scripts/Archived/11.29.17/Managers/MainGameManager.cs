@@ -3,11 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
-public class GameManager : MonoBehaviour
+public enum Fighters
 {
+    MARIE,
+    DUKEZ
+}
+
+public class MainGameManager : MonoBehaviour
+{
+    private static MainGameManager instance;
+
+    public static MainGameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = new MainGameManager();
+            return instance;
+        }
+        
+    }
+
     private Vector3 resumeButton;
     private Vector3 quitButton;
+    private int activePlayers;
+
+    public int ActivePlayers
+    {
+        get { return activePlayers; }
+        set { activePlayers = value; }
+    }
+
+    public Fighters[] Fighters;
+    public GameObject[] FighterModel;
+    [SerializeField]
+    private GameObject[] prefabs;
+
 
     private float BGMLastTime;
     private float hypeMusicLastTime;
@@ -61,6 +92,17 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        switch (Fighters[0])
+        {
+            case global::Fighters.MARIE:
+                FighterModel[0] = Instantiate(prefabs[0]);
+                break;
+            case global::Fighters.DUKEZ:
+                break;
+            default:
+                break;
+        }
+
         rounds = GameObject.Find("Round").GetComponent<Rounds>();
         stageTheme = GetComponent<AudioSource>().clip;
         ringOut.enabled = false;
