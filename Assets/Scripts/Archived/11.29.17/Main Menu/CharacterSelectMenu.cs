@@ -20,20 +20,22 @@ public class CharacterSelectMenu : MonoBehaviour
 
     private void Awake()
     {
+       audioSource = GetComponent<AudioSource>();
+    }
+    private void Start()
+    {
         if (MainGameManager.Instance.ActivePlayers == 2)
             navIcons[2].active = false;
         else
             navIcons[1].active = false;
-        
+
 
         navIcons[0].transform.position = (characterSelection[0].transform.position - new Vector3(25, 0, 0));
 
-        if(MainGameManager.Instance.ActivePlayers == 2)
+        if (MainGameManager.Instance.ActivePlayers == 2)
             navIcons[1].transform.position = (characterSelection[1].transform.position + new Vector3(125, 0, 0));
         else
             navIcons[2].transform.position = (characterSelection[1].transform.position + new Vector3(125, 0, 0));
-
-        audioSource = GetComponent<AudioSource>();
     }
     private void Update()
     {
@@ -50,7 +52,7 @@ public class CharacterSelectMenu : MonoBehaviour
         }
 
         P1Selection();
-
+        P2Selection();
         if (p1Confirmed && p2Confirmed)
             LoadLevel("RingMap");
         
@@ -105,41 +107,44 @@ public class CharacterSelectMenu : MonoBehaviour
     }
     private void P2Selection()
     {
-        if (P1Horizontal() > 0.0f)
+        if (MainGameManager.Instance.ActivePlayers == 2)
         {
-            audioSource.clip = navChime;
-            if (navIcons[1].transform.position != characterSelection[1].transform.position)
+            if (P2Horizontal() > 0.0f)
             {
-                audioSource.Play();
-                navIcons[1].transform.position = characterSelection[1].transform.position + new Vector3(125, 0, 0);
-            }
-        }
-        else if (P1Horizontal() < 0.0f)
-        {
-            if (navIcons[1].transform.position != characterSelection[0].transform.position)
-            {
-                audioSource.Play();
-                navIcons[1].transform.position = characterSelection[0].transform.position + new Vector3(125, 0, 0);
-            }
-        }
-        else if (P2ConfirmButton())
-        {
-            if (!p2Confirmed)
-            {
-                if (navIcons[1].transform.position == characterSelection[0].transform.position)
+                audioSource.clip = navChime;
+                if (navIcons[1].transform.position != characterSelection[1].transform.position)
                 {
-                    MainGameManager.Instance.Fighters[1] = Fighters.MARIE;
-                    p2Confirmed = true;
-                }
-                else if (navIcons[1].transform.position == characterSelection[1].transform.position)
-                {
-                    MainGameManager.Instance.Fighters[1] = Fighters.DUKEZ;
-                    p2Confirmed = true;
+                    audioSource.Play();
+                    navIcons[1].transform.position = characterSelection[1].transform.position + new Vector3(125, 0, 0);
                 }
             }
-            else
+            else if (P2Horizontal() < 0.0f)
             {
-                p2Confirmed = false;
+                if (navIcons[1].transform.position != characterSelection[0].transform.position)
+                {
+                    audioSource.Play();
+                    navIcons[1].transform.position = characterSelection[0].transform.position + new Vector3(125, 0, 0);
+                }
+            }
+            else if (P2ConfirmButton())
+            {
+                if (!p2Confirmed)
+                {
+                    if (navIcons[1].transform.position == characterSelection[0].transform.position)
+                    {
+                        MainGameManager.Instance.Fighters[1] = Fighters.MARIE;
+                        p2Confirmed = true;
+                    }
+                    else if (navIcons[1].transform.position == characterSelection[1].transform.position)
+                    {
+                        MainGameManager.Instance.Fighters[1] = Fighters.DUKEZ;
+                        p2Confirmed = true;
+                    }
+                }
+                else
+                {
+                    p2Confirmed = false;
+                }
             }
         }
     }
