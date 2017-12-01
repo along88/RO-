@@ -39,27 +39,12 @@ public class MomentumBar : MonoBehaviour
 
     private void Awake()
     {
-        players = new Player[2];
-        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (player.GetComponent<Player>().ID == 1)
-            {
-                players[0] = player.GetComponent<Player>();
-                playersName[0].sprite = players[0].GetComponent<Image>().sprite;
-            }
-                
-            else
-            {
-                players[1] = player.GetComponent<Player>();
-                playersName[1].sprite = players[1].GetComponent<Image>().sprite;
-            }
-
-        }
+        
         momentumBar = GameObject.FindGameObjectWithTag("Slider").GetComponent<Slider>();
-        damage = GameObject.FindGameObjectWithTag("Player").GetComponent<DamageType>(); // this needs to be dynamically assigned between both players damage type
+
         startingValue = 50.0f;
         momentumBar.value = startingValue;
-        hypeText = gameObject.transform.GetChild(2).GetComponent<Text>();
+
         playersTheme = GetComponent<AudioSource>();
         playerAudioManager = new AudioManager[2];
         foreach (var theme in GameObject.FindGameObjectsWithTag("Player"))
@@ -68,6 +53,27 @@ public class MomentumBar : MonoBehaviour
                 playerAudioManager[0] = theme.GetComponent<AudioManager>();
             else
                 playerAudioManager[1] = theme.GetComponent<AudioManager>();
+        }
+    }
+    private void Start()
+    {
+        damage = GameObject.FindGameObjectWithTag("Player").GetComponent<DamageType>(); // this needs to be dynamically assigned between both players damage type
+        hypeText = gameObject.transform.GetChild(1).GetComponent<Text>();
+        players = new Player[2];
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (player.GetComponent<Player>().ID == 1)
+            {
+                players[0] = player.GetComponent<Player>();
+                playersName[0].sprite = players[0].GetComponent<Image>().sprite;
+            }
+
+            else
+            {
+                players[1] = player.GetComponent<Player>();
+                playersName[1].sprite = players[1].GetComponent<Image>().sprite;
+            }
+
         }
     }
     private void Update()

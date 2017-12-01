@@ -34,6 +34,10 @@ public class Hitbox : MonoBehaviour
     {
         delay = new WaitForSeconds(delaySeconds);
         player = GetComponentInParent<Player>();
+    }
+    private void Start()
+    {
+        
         torso.name += player.ID.ToString();
         blockArea.name += player.ID.ToString();
     }

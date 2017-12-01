@@ -60,6 +60,7 @@ using UnityEngine.UI;
     [SerializeField]
     private AudioClip playerTwoTheme;
     private AudioClip[] playersHypeTheme;
+    private bool matchDefaultPosition;
 
     
     public GameObject[] FighterModel;
@@ -75,17 +76,47 @@ using UnityEngine.UI;
         {
             case global::Fighters.MARIE:
                 FighterModel[0] = Instantiate(prefabs[0]);
+                
                 break;
             case global::Fighters.DUKEZ:
                 FighterModel[0] = Instantiate(prefabs[1]);
+                
                 break;
             default:
                 break;
+        }
+        switch (MainGameManager.Instance.Fighters[1])
+        {
+            case global::Fighters.MARIE:
+                FighterModel[1] = Instantiate(prefabs[0]);
+                if(MainGameManager.Instance.ActivePlayers == 2)
+                    FighterModel[1].GetComponent<Player>().ID = 2;
+                else
+                    FighterModel[1].GetComponent<Player>().ID = 0;
+                break;
+            case global::Fighters.DUKEZ:
+                FighterModel[1] = Instantiate(prefabs[1]);
+                break;
+            default:
+                break;
+        }
+        FighterModel[0].GetComponent<Player>().ID = 1;
+        if (MainGameManager.Instance.ActivePlayers == 2)
+            FighterModel[1].GetComponent<Player>().ID = 2;
+        else
+            FighterModel[1].GetComponent<Player>().ID = 0;
+        foreach (var _opponent in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (_opponent.GetComponent<Player>() != FighterModel[0].GetComponent<Player>())
+                FighterModel[0].GetComponent<Player>().Opponent = _opponent.GetComponent<Player>();
+            else
+                FighterModel[1].GetComponent<Player>().Opponent = _opponent.GetComponent<Player>();
         }
         //rounds = GameObject.Find("Round").GetComponent<Rounds>();
         stageTheme = GetComponent<AudioSource>().clip;
         ringOut.enabled = false;
         audioSource = GetComponent<AudioSource>();
+        menuSFX = GetComponent<AudioSource>();
         uiTime = GameObject.Find("Time").GetComponent<Image>();
         uiTime.enabled = false;
         matchTimerText = GetComponentInChildren<Text>();
@@ -111,6 +142,7 @@ using UnityEngine.UI;
         pauseMenuObject.SetActive(false);
         MatchSetMenuObject.SetActive(false);
         nav.transform.position = (pauseButtons[0].transform.position - new Vector3(130, 0, 0));
+        nav.active = false;
 
     }
 
@@ -272,6 +304,7 @@ using UnityEngine.UI;
                 isPaused = true;
                 audioSource.Pause();
                 pauseMenuObject.SetActive(true);
+                nav.active = true;
                 StartCoroutine("PauseNavigation");
             }
 
@@ -284,12 +317,12 @@ using UnityEngine.UI;
 
         if (isMatchOver)
         {
-
+            
             Debug.Log(matchSetButtons[0].name);
             resumeButton = (matchSetButtons[0].transform.position - new Vector3(130, 10.0f, 0));
             quitButton = (matchSetButtons[1].transform.position - new Vector3(150, 1, 0));
 
-            nav.transform.parent = MatchSetMenuObject.transform;
+            //nav.transform.parent = MatchSetMenuObject.transform;
         }
         else
         {
@@ -297,18 +330,18 @@ using UnityEngine.UI;
             quitButton = (pauseButtons[1].transform.position - new Vector3(110, 0, 0));
         }
 
-        if (Navigation() == 1)
+        if (Navigation() > 0.0f)
         {
             menuSFX.clip = navChime;
             if (nav.transform.position != resumeButton)
             {
                 nav.transform.position = resumeButton;
-
+                Debug.Log("Nav Moved!");
                 menuSFX.Play();
             }
 
         }
-        else if (Navigation() == -1)
+        else if (Navigation() < 0.0f)
         {
             menuSFX.clip = navChime;
             if (nav.transform.position != quitButton)
@@ -328,7 +361,9 @@ using UnityEngine.UI;
 
             if (nav.transform.position == quitButton)
             {
+                nav.active = false;
                 SceneManager.LoadScene("Main Menu");
+
                 Time.timeScale = 1.0f;
 
             }
@@ -338,12 +373,17 @@ using UnityEngine.UI;
                 {
                     //rounds.ClearRounds();
                     MainGameManager.Instance.ClearRounds();
-                    SceneManager.LoadScene("RingMap");
+                    nav.active = false;
+                    if(MainGameManager.Instance.ActivePlayers == 2)
+                        SceneManager.LoadScene("Multiplayer");
+                    else
+                        SceneManager.LoadScene("SinglePlayer");
                 }
 
                 Time.timeScale = 1.0f;
                 isPaused = false;
                 pauseMenuObject.SetActive(false);
+                nav.active = false;
 
             }
         }
@@ -365,7 +405,7 @@ using UnityEngine.UI;
     private float Navigation()
     {
 
-        return Input.GetAxis("Nav");
+        return Input.GetAxis("NavV2");
     }
 
     private void RingOutVictory()
@@ -449,22 +489,49 @@ using UnityEngine.UI;
     }
     IEnumerator PauseNavigation()
     {
-        while (pauseMenuObject.activeSelf)
+        if (isMatchOver)
         {
-            float pauseEndTime = Time.realtimeSinceStartup + 1f;
-            while (Time.realtimeSinceStartup < pauseEndTime)
+            while (MatchSetMenuObject.activeSelf)
             {
+                float pauseEndTime = Time.realtimeSinceStartup + 1f;
+                while (Time.realtimeSinceStartup < pauseEndTime)
+                {
 
-                yield return 0;
-                PauseControls();
+                    yield return 0;
+                    PauseControls();
+
+                }
 
             }
+        }
+        else
+        {
+            while (pauseMenuObject.activeSelf)
+            {
+                float pauseEndTime = Time.realtimeSinceStartup + 1f;
+                while (Time.realtimeSinceStartup < pauseEndTime)
+                {
 
+                    yield return 0;
+                    PauseControls();
+
+                }
+
+            }
         }
     }
-    IEnumerator MatchSetNavigation()
+   
+    private void MatchSetNavigation()
     {
+        
         MatchSetMenuObject.SetActive(true);
+        nav.active = true;
+        if (!matchDefaultPosition)
+        {
+            nav.transform.position = (matchSetButtons[0].transform.position - new Vector3(100, 15.0f, 0));
+            matchDefaultPosition = true;
+        }
+        
         var text = MatchSetMenuObject.GetComponentInChildren<Text>();
         if (isPlayerOneVictory)
         {
@@ -477,20 +544,10 @@ using UnityEngine.UI;
             text.text = string.Format(players[1].name + " Wins!");
         }
 
-        nav.transform.position = (matchSetButtons[0].transform.position - new Vector3(100, 15.0f, 0));
-        Time.timeScale = 0.0f;
-        while (MatchSetMenuObject.activeSelf)
-        {
-            float pauseEndTime = Time.realtimeSinceStartup + 1f;
-            while (Time.realtimeSinceStartup < pauseEndTime)
-            {
-
-                yield return 0;
-                PauseControls();
-
-            }
-
-        }
+        
+        Time.timeScale = 0.01f;
+        StartCoroutine("PauseNavigation");
+        
     }
     IEnumerator VictoryTaunt(int player)
     {
@@ -506,14 +563,16 @@ using UnityEngine.UI;
         //if (rounds.playerVictories[player] >= 1)
         //    StartCoroutine("MatchSetNavigation");
         if (MainGameManager.Instance.PlayerVictories[player] >= 1)
-            StartCoroutine("MatchSetNaigation");
+            MatchSetNavigation();
         else
         {
             MainGameManager.Instance.Rounds++;
             MainGameManager.Instance.PlayerVictories[player]++;
             // isMatchOver = false;
-
-            SceneManager.LoadScene("RingMap");
+            if (MainGameManager.Instance.ActivePlayers == 2)
+                SceneManager.LoadScene("Multiplayer");
+            else
+                SceneManager.LoadScene("SinglePlayer");
         }
 
     }

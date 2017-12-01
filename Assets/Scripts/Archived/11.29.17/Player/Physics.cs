@@ -67,8 +67,10 @@ public class Physics : MonoBehaviour
     }
     private void UpdateRotation()
     {
-        if (!player.IsExhausted &&!player.IsTaunting && inputManager.Movement(player.ID) != Vector3.zero)
-            rb.rotation = Quaternion.LookRotation(inputManager.Movement(player.ID));
+        if (!player.IsExhausted && !player.IsTaunting && inputManager.Movement(player.ID) != Vector3.zero)
+            transform.forward = inputManager.Movement(player.ID);
+
+            //rb.rotation = Quaternion.LookRotation(inputManager.Movement(player.ID));
 
     }
     private void Dash()

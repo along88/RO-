@@ -31,7 +31,7 @@ public class MainGameManager : MonoBehaviour
     private static int activePlayers;
     private static int round;
     private static int[] playerVictories = new int[2];
-    private static Fighters[] fighters;
+    private static Fighters[] fighters = new Fighters[2];
 
 
     public int ActivePlayers
@@ -58,8 +58,6 @@ public class MainGameManager : MonoBehaviour
     void Start()
     {
         round++;
-        Fighters = new Fighters[2];
-        
     }
 
     public void ClearRounds()
