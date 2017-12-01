@@ -81,15 +81,15 @@ public class MainMenu : MonoBehaviour
             else if (nav.transform.position == multiplayer)
             {
                 //LoadLevel("RingMap");
-
-                SceneManager.LoadScene("RingMap");
+                MainGameManager.Instance.ActivePlayers = 2;
+                SceneManager.LoadScene("CharacterSelectMenu");
             }
             
         }
     }
     private float Navigation()
     {
-        return Input.GetAxis("Nav");
+        return Input.GetAxis("NavV1");
     }
     private bool ConfirmButton()
     {

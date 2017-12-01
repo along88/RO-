@@ -457,8 +457,8 @@ InputManager:
     m_Name: NavH2
     descriptiveName: Navigate menus
     descriptiveNegativeName: 
-    negativeButton: down
-    positiveButton: up
+    negativeButton: left
+    positiveButton: right
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000

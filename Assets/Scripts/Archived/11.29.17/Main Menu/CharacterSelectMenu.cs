@@ -45,7 +45,7 @@ public class CharacterSelectMenu : MonoBehaviour
             navIcons[1].transform.position = navIcons[2].transform.position;
             navIcons[2].active = false;
             navIcons[1].active = true;
-
+            MainGameManager.Instance.ActivePlayers = 2;
             ///To Do:
             ///Pass Control of the Selection Indicator to Player2's Controller inputs;
 
@@ -68,7 +68,9 @@ public class CharacterSelectMenu : MonoBehaviour
 
     private void P1Selection()
     {
-        if (P1Horizontal() > 0.0f)
+        if (!p1Confirmed)
+        {
+            if (P1Horizontal() > 0.0f)
         {
             audioSource.clip = navChime;
             if (navIcons[0].transform.position != characterSelection[1].transform.position)
@@ -77,7 +79,7 @@ public class CharacterSelectMenu : MonoBehaviour
                 navIcons[0].transform.position = characterSelection[1].transform.position - new Vector3(125, 0, 0);
             }
         }
-        else if (P1Horizontal() < 0.0f)
+            else if (P1Horizontal() < 0.0f)
         {
             if (navIcons[0].transform.position != characterSelection[0].transform.position)
             {
@@ -85,65 +87,60 @@ public class CharacterSelectMenu : MonoBehaviour
                 navIcons[0].transform.position = characterSelection[0].transform.position - new Vector3(125, 0, 0);
             }
         }
-        else if (P1ConfirmButton())
+            else if (P1ConfirmButton())
         {
-            if (!p1Confirmed)
+
+            if (navIcons[0].transform.position == characterSelection[0].transform.position)
             {
-                if (navIcons[0].transform.position == characterSelection[0].transform.position)
-                {
-                    MainGameManager.Instance.Fighters[0] = Fighters.MARIE;
-                    p1Confirmed = true;
-                }
-                else if (navIcons[0].transform.position == characterSelection[1].transform.position)
-                {
-                    MainGameManager.Instance.Fighters[0] = Fighters.DUKEZ;
-                    p1Confirmed = true;
-                }
-            }else
-            {
-                p1Confirmed = false;
+                MainGameManager.Instance.Fighters[0] = Fighters.MARIE;
+                p1Confirmed = true;
             }
+            else if (navIcons[0].transform.position == characterSelection[1].transform.position)
+            {
+                MainGameManager.Instance.Fighters[0] = Fighters.DUKEZ;
+                p1Confirmed = true;
+            }
+
+        }
         }
     }
     private void P2Selection()
     {
         if (MainGameManager.Instance.ActivePlayers == 2)
         {
-            if (P2Horizontal() > 0.0f)
-            {
-                audioSource.clip = navChime;
-                if (navIcons[1].transform.position != characterSelection[1].transform.position)
+            if (!p2Confirmed)
+            { 
+                if (P2Horizontal() > 0.0f)
                 {
-                    audioSource.Play();
-                    navIcons[1].transform.position = characterSelection[1].transform.position + new Vector3(125, 0, 0);
-                }
-            }
-            else if (P2Horizontal() < 0.0f)
-            {
-                if (navIcons[1].transform.position != characterSelection[0].transform.position)
-                {
-                    audioSource.Play();
-                    navIcons[1].transform.position = characterSelection[0].transform.position + new Vector3(125, 0, 0);
-                }
-            }
-            else if (P2ConfirmButton())
-            {
-                if (!p2Confirmed)
-                {
-                    if (navIcons[1].transform.position == characterSelection[0].transform.position)
+                    audioSource.clip = navChime;
+                    if (navIcons[1].transform.position != characterSelection[1].transform.position)
                     {
-                        MainGameManager.Instance.Fighters[1] = Fighters.MARIE;
-                        p2Confirmed = true;
-                    }
-                    else if (navIcons[1].transform.position == characterSelection[1].transform.position)
-                    {
-                        MainGameManager.Instance.Fighters[1] = Fighters.DUKEZ;
-                        p2Confirmed = true;
+                        audioSource.Play();
+                        navIcons[1].transform.position = characterSelection[1].transform.position + new Vector3(125, 0, 0);
                     }
                 }
-                else
+                else if (P2Horizontal() < 0.0f)
                 {
-                    p2Confirmed = false;
+                    if (navIcons[1].transform.position != characterSelection[0].transform.position)
+                    {
+                        audioSource.Play();
+                        navIcons[1].transform.position = characterSelection[0].transform.position + new Vector3(125, 0, 0);
+                    }
+                }
+                else if (P2ConfirmButton())
+                {
+                    
+                        if (navIcons[1].transform.position == characterSelection[0].transform.position)
+                        {
+                            MainGameManager.Instance.Fighters[1] = Fighters.MARIE;
+                            p2Confirmed = true;
+                        }
+                        else if (navIcons[1].transform.position == characterSelection[1].transform.position)
+                        {
+                            MainGameManager.Instance.Fighters[1] = Fighters.DUKEZ;
+                            p2Confirmed = true;
+                        }
+                    
                 }
             }
         }
@@ -172,17 +169,13 @@ public class CharacterSelectMenu : MonoBehaviour
 
     private bool P1ConfirmButton()
     {
-        bool buttonPressed = new bool();
-        if (Input.GetButtonDown("Attack1"))
-            buttonPressed = Input.GetButtonDown("Attack1");
-        return buttonPressed;
+        
+       return Input.GetButtonDown("Attack1");
+       
     }
     private bool P2ConfirmButton()
     {
-        bool buttonPressed = new bool();
-        if (Input.GetButtonDown("Attack2"))
-            buttonPressed = Input.GetButtonDown("Attack2");
-        return buttonPressed;
+        return Input.GetButtonDown("Attack2");
     }
 
 

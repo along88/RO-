@@ -7,6 +7,9 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Main Menu.unity
+    guid: e7caf73d02030e14a99f7a12a8c98945
+  - enabled: 1
+    path: Assets/Scenes/CharacterSelectMenu.unity
     guid: 9dbf8583309b2894ea41fd060ffe2cd6
   - enabled: 1
     path: Assets/Scenes/RingMap.unity
