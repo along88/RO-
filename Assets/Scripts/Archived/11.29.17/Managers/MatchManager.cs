@@ -75,11 +75,12 @@ using UnityEngine.UI;
         switch (MainGameManager.Instance.Fighters[0])
         {
             case global::Fighters.MARIE:
-                FighterModel[0] = Instantiate(prefabs[0]);
+                FighterModel[0] = Instantiate(prefabs[0], new Vector3(-39,43,10), Quaternion.LookRotation(Vector3.forward));
+                
                 
                 break;
             case global::Fighters.DUKEZ:
-                FighterModel[0] = Instantiate(prefabs[1]);
+                FighterModel[0] = Instantiate(prefabs[1], new Vector3(-39, 43, 10), Quaternion.LookRotation(Vector3.forward));
                 
                 break;
             default:
@@ -88,14 +89,14 @@ using UnityEngine.UI;
         switch (MainGameManager.Instance.Fighters[1])
         {
             case global::Fighters.MARIE:
-                FighterModel[1] = Instantiate(prefabs[0]);
+                FighterModel[1] = Instantiate(prefabs[0], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
                 if(MainGameManager.Instance.ActivePlayers == 2)
                     FighterModel[1].GetComponent<Player>().ID = 2;
                 else
                     FighterModel[1].GetComponent<Player>().ID = 0;
                 break;
             case global::Fighters.DUKEZ:
-                FighterModel[1] = Instantiate(prefabs[1]);
+                FighterModel[1] = Instantiate(prefabs[1], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
                 break;
             default:
                 break;

@@ -95,7 +95,7 @@ public class CharacterSelectMenu : MonoBehaviour
             if (P1Horizontal() > 0.0f)
             {
                 audioSource.clip = navChime;
-                if (navIcons[0].transform.position != characterSelection[1].transform.position)
+                if (navIcons[0].transform.position != characterSelection[1].transform.position - new Vector3(125, 0, 0))
                 {
                     audioSource.Play();
                     navIcons[0].transform.position = characterSelection[1].transform.position - new Vector3(125, 0, 0);
@@ -105,7 +105,7 @@ public class CharacterSelectMenu : MonoBehaviour
             else if (P1Horizontal() < 0.0f)
             {
                 audioSource.clip = navChime;
-                if (navIcons[0].transform.position != characterSelection[0].transform.position)
+                if (navIcons[0].transform.position != characterSelection[0].transform.position - new Vector3(125, 0, 0))
                     {
                         audioSource.Play();
                         navIcons[0].transform.position = characterSelection[0].transform.position - new Vector3(125, 0, 0);
@@ -117,15 +117,15 @@ public class CharacterSelectMenu : MonoBehaviour
                 audioSource.clip = navConfirm;
                 if (navIcons[0].transform.position == (characterSelection[0].transform.position - new Vector3(125, 0, 0)))
                 {
-                audioSource.Play();
-                MainGameManager.Instance.Fighters[0] = Fighters.MARIE;
+                    audioSource.Play();
+                    MainGameManager.Instance.Fighters[0] = Fighters.MARIE;
                     p1Confirmed = true;
 
-            }
+                }
                 else if (navIcons[0].transform.position == (characterSelection[1].transform.position - new Vector3(125, 0, 0)))
                 {
-                audioSource.Play();
-                MainGameManager.Instance.Fighters[0] = Fighters.DUKEZ;
+                    audioSource.Play();
+                    MainGameManager.Instance.Fighters[0] = Fighters.DUKEZ;
                     p1Confirmed = true;
                 }
             }
@@ -189,11 +189,6 @@ public class CharacterSelectMenu : MonoBehaviour
 
             }
         }
-        
-
-            
-        
-        
     }
 
 
@@ -219,9 +214,10 @@ public class CharacterSelectMenu : MonoBehaviour
 
     private bool P1ConfirmButton()
     {
-        
-       return Input.GetButtonDown("Attack1");
-       
+        bool buttonPressed = new bool();
+        if (Input.GetButtonDown("Attack1"))
+            buttonPressed = Input.GetButtonDown("Attack1");
+        return buttonPressed;
     }
     private bool P2ConfirmButton()
     {

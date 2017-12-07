@@ -25,7 +25,7 @@ public class MainMenu : MonoBehaviour
     }
     private void Update()
     {
-        PauseControls();
+        MenuControls();
     }
 
     private Vector2 SetDefaultPosition(Vector2 _defaultPosition)
@@ -43,7 +43,7 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    private void PauseControls()
+    private void MenuControls()
     {
         var multiplayer = (multiplayerButton.transform.position - new Vector3(175, 0, 0));
         var quit = (quitButton.transform.position - new Vector3(175, 0, 0));
