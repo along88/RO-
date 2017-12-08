@@ -47,13 +47,13 @@ public class MomentumBar : MonoBehaviour
 
         playersTheme = GetComponent<AudioSource>();
         playerAudioManager = new AudioManager[2];
-        foreach (var theme in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (theme.GetComponent<Player>().ID == 1)
-                playerAudioManager[0] = theme.GetComponent<AudioManager>();
-            else
-                playerAudioManager[1] = theme.GetComponent<AudioManager>();
-        }
+        //foreach (var theme in GameObject.FindGameObjectsWithTag("Player"))
+        //{
+        //    if (theme.GetComponent<Player>().ID == 1)
+        //        playerAudioManager[0] = theme.GetComponent<AudioManager>();
+        //    else
+        //        playerAudioManager[1] = theme.GetComponent<AudioManager>();
+        //}
     }
     private void Start()
     {
@@ -66,12 +66,14 @@ public class MomentumBar : MonoBehaviour
             {
                 players[0] = player.GetComponent<Player>();
                 playersName[0].sprite = players[0].GetComponent<Image>().sprite;
+                playerAudioManager[0] = player.GetComponent<AudioManager>();
             }
 
             else
             {
                 players[1] = player.GetComponent<Player>();
                 playersName[1].sprite = players[1].GetComponent<Image>().sprite;
+                playerAudioManager[1] = player.GetComponent<AudioManager>();
             }
 
         }
@@ -97,7 +99,7 @@ public class MomentumBar : MonoBehaviour
             {
                 //playersTheme.clip = themeOne;
                 //playersTheme.Play();
-                hypeText.text = "Player One is HYPED!";
+                //hypeText.text = "Player One is HYPED!";
                 players[0].IsTaunting = true;
                 players[0].IsHyped = true;
             Debug.Log(players[0].name + "Is Hyped");
@@ -166,7 +168,7 @@ public class MomentumBar : MonoBehaviour
             {
                 isHyped = false;
                 isTimer = false;
-                hypeText.text = "";
+               // hypeText.text = "";
                 momentumBar.value = startingValue;
                 players[0].IsHyped = false;
                 players[1].IsHyped = false;

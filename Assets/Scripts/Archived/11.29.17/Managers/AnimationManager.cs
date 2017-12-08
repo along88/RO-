@@ -196,7 +196,7 @@ public class AnimationManager : MonoBehaviour
                 player.AttackCounter++;
                 anim.Play("Attack");
                 player.LastSuccessfulAttack = Time.time;
-               if(player.name == string.Format("Marie"))
+               if(player.name == string.Format("Marie(Clone)"))
                 {
                     resetDelay = 2.0f;
                    // attackDelay = .1f;
@@ -211,7 +211,7 @@ public class AnimationManager : MonoBehaviour
                 player.AttackCounter++;
                 anim.Play("Attack2");
                 player.LastSuccessfulAttack = Time.time;
-                if (player.name == string.Format("Marie"))
+                if (player.name == string.Format("Marie(Clone)"))
                 {
                     resetDelay = 1.5f;
                    // attackDelay = 1.0f;
@@ -219,19 +219,33 @@ public class AnimationManager : MonoBehaviour
                 else
                     resetDelay = 0.8f;
             }
-            else if (player.AttackCounter >= 2)
+            else if (player.AttackCounter == 2)
             {
                 player.IsAttacking = true;
-                
+                player.AttackCounter++;
                 anim.Play("Attack3");
                 player.LastSuccessfulAttack = Time.time;
-                if (player.name == string.Format("Marie"))
+                if (player.name == string.Format("Marie(Clone)"))
                 {
-                    resetDelay = 1.0f;
+                    resetDelay = 1.5f;
                 }
                 else
                     resetDelay = 0.6f;
 
+            }
+            else if (player.AttackCounter >= 3)
+            {
+                player.IsAttacking = true;
+                player.AttackCounter = 1;
+                anim.Play("Attack");
+                player.LastSuccessfulAttack = Time.time;
+                if (player.name == string.Format("Marie(Clone)"))
+                {
+                    resetDelay = 2.0f;
+                    // attackDelay = .1f;
+                }
+                else
+                    resetDelay = 0.8f;
             }
             
             

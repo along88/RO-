@@ -154,7 +154,7 @@ public class Physics : MonoBehaviour
         //rb.position += player.Opponent.HitDirection * knockBackForce * Time.deltaTime;
         
         float dashSpeed_ = dashSpeed;
-        rb.position += player.transform.forward * dashSpeed * Time.deltaTime;
+        rb.position += (player.transform.forward * dashSpeed) * Time.deltaTime;
         dashDelay = new WaitForSeconds(dashDelayLength);
         yield return dashDelay;
         player.IsDashing = false;
