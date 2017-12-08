@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class InputManager : MonoBehaviour
 {
-    [SerializeField]
-    protected int controlNo;
-    public int ControlNo { get {return controlNo; } }
+    //[SerializeField]
+    //protected int controlNo;
+    //public int ControlNo { get { return controlNo; } }
 
     public abstract float GetHorizontal(int playerID);
     public abstract float GetVertical(int playerID);

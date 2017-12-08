@@ -18,9 +18,17 @@ public class BlockGauge : MonoBehaviour
     {
         inputManager = GetComponent<InputManager>();
         player = GetComponent<Player>();
-        gaugeSlider = GameObject.FindGameObjectWithTag("gaugeSlider"+player.ID).GetComponent<Slider>();
-        gaugeSlider.value = gaugeSlider.maxValue;
+       
         canBlock = true;
+        
+    }
+    private void Start()
+    {
+        if(player.ID == 1)
+        gaugeSlider = GameObject.FindGameObjectWithTag("gaugeSlider1").GetComponent<Slider>();
+        else
+            gaugeSlider = GameObject.FindGameObjectWithTag("gaugeSlider2").GetComponent<Slider>();
+        gaugeSlider.value = gaugeSlider.maxValue;
         jammerText = gaugeSlider.GetComponentsInChildren<Image>()[2];
         jammerText.enabled = false;
     }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Experimental.UIElements;
 
 public class CharacterSelectMenu : MonoBehaviour
 {
@@ -10,12 +11,18 @@ public class CharacterSelectMenu : MonoBehaviour
     [SerializeField]
     private AudioClip navChime;
     [SerializeField]
+    private AudioClip navDeselect;
+    [SerializeField]
     private AudioClip navConfirm;
     [SerializeField]
-    private Button[] characterSelection;
+    private UnityEngine.UI.Button[] characterSelection;
     [SerializeField]
     private GameObject[] navIcons;
     private int[] maxCharacters;
+    [SerializeField]
+    private Text[] characterInfo;
+    [SerializeField]
+    private UnityEngine.UI.Image p2Panel;
 
 
     private void Awake()
@@ -24,13 +31,18 @@ public class CharacterSelectMenu : MonoBehaviour
     }
     private void Start()
     {
+        p1Confirmed = false;
+        p2Confirmed = false;
         if (MainGameManager.Instance.ActivePlayers == 2)
+        {
             navIcons[2].active = false;
+            p2Panel.color = Color.green;
+        }
         else
             navIcons[1].active = false;
 
 
-        navIcons[0].transform.position = (characterSelection[0].transform.position - new Vector3(25, 0, 0));
+        navIcons[0].transform.position = (characterSelection[0].transform.position - new Vector3(125, 0, 0));
 
         if (MainGameManager.Instance.ActivePlayers == 2)
             navIcons[1].transform.position = (characterSelection[1].transform.position + new Vector3(125, 0, 0));
@@ -39,27 +51,37 @@ public class CharacterSelectMenu : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetButtonDown("Attack2") && MainGameManager.Instance.ActivePlayers != 2)
-        {
-            //change cpu icon to P2
-            navIcons[1].transform.position = navIcons[2].transform.position;
-            navIcons[2].active = false;
-            navIcons[1].active = true;
-            MainGameManager.Instance.ActivePlayers = 2;
-            ///To Do:
-            ///Pass Control of the Selection Indicator to Player2's Controller inputs;
+        
+        if(!p1Confirmed)
+            P1Selection();
+        if (!p2Confirmed)
+            P2Selection();
 
+        if (p1Confirmed || p2Confirmed)
+        {
+            if (Input.GetButtonDown("Jump1"))
+            {
+                audioSource.clip = navDeselect;
+                audioSource.Play();
+                p1Confirmed = false;
+            }
+            else if (Input.GetButtonDown("Jump2"))
+            {
+                audioSource.clip = navDeselect;
+                audioSource.Play();
+                p2Confirmed = false;
+            }
         }
 
-        P1Selection();
-        P2Selection();
         if (p1Confirmed && p2Confirmed)
-            LoadLevel("RingMap");
-        
+        {
+            if(MainGameManager.Instance.ActivePlayers == 2)
+                LoadLevel("Multiplayer");
+            else
+                LoadLevel("SinglePlayer");
 
-
-
-
+        }
+            
     }
     public void LoadLevel(string level)
     {
@@ -68,80 +90,103 @@ public class CharacterSelectMenu : MonoBehaviour
 
     private void P1Selection()
     {
-        if (!p1Confirmed)
-        {
+        
+        
             if (P1Horizontal() > 0.0f)
-        {
-            audioSource.clip = navChime;
-            if (navIcons[0].transform.position != characterSelection[1].transform.position)
             {
-                audioSource.Play();
-                navIcons[0].transform.position = characterSelection[1].transform.position - new Vector3(125, 0, 0);
+                audioSource.clip = navChime;
+                if (navIcons[0].transform.position != characterSelection[1].transform.position - new Vector3(125, 0, 0))
+                {
+                    audioSource.Play();
+                    navIcons[0].transform.position = characterSelection[1].transform.position - new Vector3(125, 0, 0);
+                    characterInfo[0].text = "<b><i>Name:</i></b> <b>Dukez</b> \n \n<b><i>Dmg Type:</i></b> <color=#ffff00ff><b> Light</b></color> \n \n<b><i>Hype Attack:</i></b> <b>Palm Blast</b>";
+                }
             }
-        }
             else if (P1Horizontal() < 0.0f)
-        {
-            if (navIcons[0].transform.position != characterSelection[0].transform.position)
             {
-                audioSource.Play();
-                navIcons[0].transform.position = characterSelection[0].transform.position - new Vector3(125, 0, 0);
+                audioSource.clip = navChime;
+                if (navIcons[0].transform.position != characterSelection[0].transform.position - new Vector3(125, 0, 0))
+                    {
+                        audioSource.Play();
+                        navIcons[0].transform.position = characterSelection[0].transform.position - new Vector3(125, 0, 0);
+                        characterInfo[0].text = "<b><i>Name:</i></b> <b>Marie O'Nett</b> \n \n<b><i>Dmg Type:</i></b> <color=red><b> Heavy</b></color> \n \n<b><i>Hype Attack:</i></b> <b>Tornado Swing</b>";
+                }
             }
-        }
             else if (P1ConfirmButton())
-        {
-
-            if (navIcons[0].transform.position == characterSelection[0].transform.position)
             {
-                MainGameManager.Instance.Fighters[0] = Fighters.MARIE;
-                p1Confirmed = true;
-            }
-            else if (navIcons[0].transform.position == characterSelection[1].transform.position)
-            {
-                MainGameManager.Instance.Fighters[0] = Fighters.DUKEZ;
-                p1Confirmed = true;
-            }
+                audioSource.clip = navConfirm;
+                if (navIcons[0].transform.position == (characterSelection[0].transform.position - new Vector3(125, 0, 0)))
+                {
+                    audioSource.Play();
+                    MainGameManager.Instance.Fighters[0] = Fighters.MARIE;
+                    p1Confirmed = true;
 
-        }
-        }
+                }
+                else if (navIcons[0].transform.position == (characterSelection[1].transform.position - new Vector3(125, 0, 0)))
+                {
+                    audioSource.Play();
+                    MainGameManager.Instance.Fighters[0] = Fighters.DUKEZ;
+                    p1Confirmed = true;
+                }
+            }
+            
+    
+        
     }
     private void P2Selection()
     {
-        if (MainGameManager.Instance.ActivePlayers == 2)
+        if (MainGameManager.Instance.ActivePlayers != 2 && P2ConfirmButton())
         {
-            if (!p2Confirmed)
-            { 
-                if (P2Horizontal() > 0.0f)
+                audioSource.clip = navConfirm;
+                //change cpu icon to P2
+                audioSource.Play();
+                navIcons[1].transform.position = navIcons[2].transform.position;
+                navIcons[2].active = false;
+                navIcons[1].active = true;
+                MainGameManager.Instance.ActivePlayers = 2;
+                p2Panel.color = Color.green;
+
+
+        }
+        else if(MainGameManager.Instance.ActivePlayers == 2)
+        {
+            if (P2Horizontal() > 0.0f)
+            {
+                audioSource.clip = navChime;
+                if (navIcons[1].transform.position != characterSelection[1].transform.position)
                 {
-                    audioSource.clip = navChime;
-                    if (navIcons[1].transform.position != characterSelection[1].transform.position)
-                    {
-                        audioSource.Play();
-                        navIcons[1].transform.position = characterSelection[1].transform.position + new Vector3(125, 0, 0);
-                    }
+                    audioSource.Play();
+                    navIcons[1].transform.position = characterSelection[1].transform.position + new Vector3(125, 0, 0);
+                    characterInfo[1].text = "<b><i>Name:</i></b> <b>Dukez</b> \n \n<b><i>Dmg Type:</i></b> <color=#ffff00ff><b> Light</b></color> \n \n<b><i>Hype Attack:</i></b> <b>Palm Blast</b>";
                 }
-                else if (P2Horizontal() < 0.0f)
+            }
+            else if (P2Horizontal() < 0.0f)
+            {
+                audioSource.clip = navChime;
+                if (navIcons[1].transform.position != characterSelection[0].transform.position)
                 {
-                    if (navIcons[1].transform.position != characterSelection[0].transform.position)
-                    {
-                        audioSource.Play();
-                        navIcons[1].transform.position = characterSelection[0].transform.position + new Vector3(125, 0, 0);
-                    }
+                    audioSource.Play();
+                    navIcons[1].transform.position = characterSelection[0].transform.position + new Vector3(125, 0, 0);
+                    characterInfo[1].text = "<b><i>Name:</i></b> <b>Marie O'Nett</b> \n \n<b><i>Dmg Type:</i></b> <color=red><b> Heavy</b></color> \n \n<b><i>Hype Attack:</i></b> <b>Tornado Swing</b>";
                 }
-                else if (P2ConfirmButton())
+            }
+            else if (P2ConfirmButton())
+            {
+                audioSource.clip = navConfirm;
+
+                if (navIcons[1].transform.position == characterSelection[0].transform.position + new Vector3(125, 0, 0))
                 {
-                    
-                        if (navIcons[1].transform.position == characterSelection[0].transform.position)
-                        {
-                            MainGameManager.Instance.Fighters[1] = Fighters.MARIE;
-                            p2Confirmed = true;
-                        }
-                        else if (navIcons[1].transform.position == characterSelection[1].transform.position)
-                        {
-                            MainGameManager.Instance.Fighters[1] = Fighters.DUKEZ;
-                            p2Confirmed = true;
-                        }
-                    
+                    audioSource.Play();
+                    MainGameManager.Instance.Fighters[1] = Fighters.MARIE;
+                    p2Confirmed = true;
                 }
+                else if (navIcons[1].transform.position == characterSelection[1].transform.position + new Vector3(125, 0, 0))
+                {
+                    audioSource.Play();
+                    MainGameManager.Instance.Fighters[1] = Fighters.DUKEZ;
+                    p2Confirmed = true;
+                }
+
             }
         }
     }
@@ -169,9 +214,10 @@ public class CharacterSelectMenu : MonoBehaviour
 
     private bool P1ConfirmButton()
     {
-        
-       return Input.GetButtonDown("Attack1");
-       
+        bool buttonPressed = new bool();
+        if (Input.GetButtonDown("Attack1"))
+            buttonPressed = Input.GetButtonDown("Attack1");
+        return buttonPressed;
     }
     private bool P2ConfirmButton()
     {

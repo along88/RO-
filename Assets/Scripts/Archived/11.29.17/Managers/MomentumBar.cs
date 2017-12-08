@@ -39,6 +39,26 @@ public class MomentumBar : MonoBehaviour
 
     private void Awake()
     {
+        
+        momentumBar = GameObject.FindGameObjectWithTag("Slider").GetComponent<Slider>();
+
+        startingValue = 50.0f;
+        momentumBar.value = startingValue;
+
+        playersTheme = GetComponent<AudioSource>();
+        playerAudioManager = new AudioManager[2];
+        //foreach (var theme in GameObject.FindGameObjectsWithTag("Player"))
+        //{
+        //    if (theme.GetComponent<Player>().ID == 1)
+        //        playerAudioManager[0] = theme.GetComponent<AudioManager>();
+        //    else
+        //        playerAudioManager[1] = theme.GetComponent<AudioManager>();
+        //}
+    }
+    private void Start()
+    {
+        damage = GameObject.FindGameObjectWithTag("Player").GetComponent<DamageType>(); // this needs to be dynamically assigned between both players damage type
+        hypeText = gameObject.transform.GetChild(1).GetComponent<Text>();
         players = new Player[2];
         foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
         {
@@ -46,28 +66,16 @@ public class MomentumBar : MonoBehaviour
             {
                 players[0] = player.GetComponent<Player>();
                 playersName[0].sprite = players[0].GetComponent<Image>().sprite;
+                playerAudioManager[0] = player.GetComponent<AudioManager>();
             }
-                
+
             else
             {
                 players[1] = player.GetComponent<Player>();
                 playersName[1].sprite = players[1].GetComponent<Image>().sprite;
+                playerAudioManager[1] = player.GetComponent<AudioManager>();
             }
 
-        }
-        momentumBar = GameObject.FindGameObjectWithTag("Slider").GetComponent<Slider>();
-        damage = GameObject.FindGameObjectWithTag("Player").GetComponent<DamageType>(); // this needs to be dynamically assigned between both players damage type
-        startingValue = 50.0f;
-        momentumBar.value = startingValue;
-        hypeText = gameObject.transform.GetChild(2).GetComponent<Text>();
-        playersTheme = GetComponent<AudioSource>();
-        playerAudioManager = new AudioManager[2];
-        foreach (var theme in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (theme.GetComponent<Player>().ID == 1)
-                playerAudioManager[0] = theme.GetComponent<AudioManager>();
-            else
-                playerAudioManager[1] = theme.GetComponent<AudioManager>();
         }
     }
     private void Update()
@@ -91,7 +99,7 @@ public class MomentumBar : MonoBehaviour
             {
                 //playersTheme.clip = themeOne;
                 //playersTheme.Play();
-                hypeText.text = "Player One is HYPED!";
+                //hypeText.text = "Player One is HYPED!";
                 players[0].IsTaunting = true;
                 players[0].IsHyped = true;
             Debug.Log(players[0].name + "Is Hyped");
@@ -160,7 +168,7 @@ public class MomentumBar : MonoBehaviour
             {
                 isHyped = false;
                 isTimer = false;
-                hypeText.text = "";
+               // hypeText.text = "";
                 momentumBar.value = startingValue;
                 players[0].IsHyped = false;
                 players[1].IsHyped = false;

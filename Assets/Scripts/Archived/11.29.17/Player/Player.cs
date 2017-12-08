@@ -53,8 +53,8 @@ public class Player : MonoBehaviour{
 
 
     //Public Properties 
-    public int ID { get { return id; } }
-    public Player Opponent { get { return opponent; }}
+    public int ID { get { return id; } set { id = value; } }
+    public Player Opponent { get { return opponent; }set { opponent = value; } }
     public bool IsGrounded { get { return isGrounded; } }
     public bool IsExhausted
     {
@@ -153,12 +153,7 @@ public class Player : MonoBehaviour{
         
         canMove = true;
         CanDash = true;
-        foreach (var item in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (item.GetComponent<Player>() != this)
-                opponent = item.GetComponent<Player>();
-        }
-        id = GetComponent<InputManager>().ControlNo;
+        //id = GetComponent<InputManager>().ControlNo;
 
         damageType = GetComponent<DamageType>();
 

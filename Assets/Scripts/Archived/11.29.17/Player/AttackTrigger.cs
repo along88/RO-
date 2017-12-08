@@ -40,7 +40,7 @@ public class AttackTrigger : TriggerManager
                 //{
                 //    maxHitCounter = 0;
                 //}
-                if (player.AttackCounter == 3)
+                if (player.AttackCounter == 3 || !player.Opponent.IsGrounded)
                 {
                     player.Opponent.IsKnockedBack = true;
                     maxHitCounter = 0;
