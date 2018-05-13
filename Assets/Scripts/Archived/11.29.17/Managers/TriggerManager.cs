@@ -15,13 +15,13 @@ using UnityEngine;
         private void Start()
         {
             player = GetComponentInParent<Player>();
-            opponentDefenseHitbox = "BlockArea" + player.Opponent.ID.ToString();
-            opponentsHitbox = "Body" + player.Opponent.ID.ToString();
+            opponentDefenseHitbox = string.Format( "BlockArea{0}",player.Opponent.ID.ToString());
+            opponentsHitbox = string.Format("Body{0}",player.Opponent.ID.ToString());
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider hitbox)
         {
-            ActivateTriggers(other);
+            ActivateTriggers(hitbox);
         }
 
         protected abstract void ActivateTriggers(Collider opponentHitbox);
