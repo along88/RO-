@@ -171,8 +171,8 @@ InputManager:
     descriptiveNegativeName: Move 2nd player to the Left
     negativeButton: left
     positiveButton: right
-    altNegativeButton: 
-    altPositiveButton: 
+    altNegativeButton: left
+    altPositiveButton: right
     gravity: 1
     dead: 0.3
     sensitivity: 1
@@ -195,6 +195,22 @@ InputManager:
     snap: 0
     invert: 1
     type: 2
+    axis: 1
+    joyNum: 2
+  - serializedVersion: 3
+    m_Name: Vertical2
+    descriptiveName: LS Move 2nd player Up
+    descriptiveNegativeName: LS Move 2nd player Down
+    negativeButton: down
+    positiveButton: up
+    altNegativeButton: down
+    altPositiveButton: up
+    gravity: 1
+    dead: 0.3
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 0
     axis: 1
     joyNum: 2
   - serializedVersion: 3
@@ -349,6 +365,38 @@ InputManager:
     positiveButton: right
     altNegativeButton: 
     altPositiveButton: 
+    gravity: 1
+    dead: 0.3
+    sensitivity: 1
+    snap: 1
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 2
+  - serializedVersion: 3
+    m_Name: Horizontal2
+    descriptiveName: Move 2nd player to the Right
+    descriptiveNegativeName: Move 2nd player to the Left
+    negativeButton: left
+    positiveButton: right
+    altNegativeButton: left
+    altPositiveButton: right
+    gravity: 1
+    dead: 0.3
+    sensitivity: 1
+    snap: 1
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 2
+  - serializedVersion: 3
+    m_Name: Horizontal2
+    descriptiveName: Move 2nd player to the Right
+    descriptiveNegativeName: Move 2nd player to the Left
+    negativeButton: left
+    positiveButton: right
+    altNegativeButton: left
+    altPositiveButton: right
     gravity: 1
     dead: 0.3
     sensitivity: 1
