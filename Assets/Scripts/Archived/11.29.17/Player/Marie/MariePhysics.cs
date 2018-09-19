@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class MariePhysics  : Physics
+public class MariePhysics  : GamePhysics
 {
     [SerializeField]
     private float lungeDistance = 5.0f;

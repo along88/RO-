@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class XiaoPhysics  : Physics
+public class XiaoPhysics  : GamePhysics
 {
     
     [SerializeField]
