@@ -34,19 +34,24 @@ public class Player : MonoBehaviour
        
     }
 
+    private void LateUpdate()
+    {
+        Rotate();
+    }
+
     private void Move(float x, float z)
     {
         Vector3 moveDirection = new Vector3(x * Fighter.Speed, 0.0f, z * Fighter.Speed) * Time.deltaTime;
 
         rb.velocity = moveDirection;
 
-        Rotate(moveDirection);
+        
        
         
     }
-    private void Rotate(Vector3 direction)
+    private void Rotate()
     {
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction),5.0f * Time.deltaTime);
+        transform.forward = new Vector3(Input.GetAxisRaw("Horizontal1"), 0.0f, Input.GetAxisRaw("Vertical1"));
 
     }
 }
