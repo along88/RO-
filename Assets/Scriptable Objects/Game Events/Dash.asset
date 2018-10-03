@@ -9,5 +9,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bfe06001f2a37244b677a1eccfe689f, type: 3}
-  m_Name: Damage
+  m_Name: Dash
   m_EditorClassIdentifier: 

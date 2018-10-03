@@ -460,6 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameEvent: {fileID: 11400000, guid: 6dd07ef6cc0101d459901f1d3a0c3efa, type: 2}
+  moveSpeed: 5
 --- !u!54 &1001597991
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -491,7 +492,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1001597990}
-        m_MethodName: OnHit
+        m_MethodName: Dash
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
