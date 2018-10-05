@@ -331,6 +331,7 @@ GameObject:
   - component: {fileID: 1565040183}
   - component: {fileID: 1565040187}
   - component: {fileID: 1565040188}
+  - component: {fileID: 1565040189}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Player
@@ -432,7 +433,7 @@ MonoBehaviour:
   response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 137516156}
+      - m_Target: {fileID: 1565040189}
         m_MethodName: Hurt
         m_Mode: 1
         m_Arguments:
@@ -445,6 +446,22 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &1565040189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1565040182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a802ef7d53580846844b4adc4c87655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent:
+  - {fileID: 11400000, guid: 62b74d9ced5ed3244b0bc60d0c7cd9e5, type: 2}
+  - {fileID: 11400000, guid: 6f075d36ecaba2a439e294955c79c6d4, type: 2}
+  - {fileID: 11400000, guid: 6dd07ef6cc0101d459901f1d3a0c3efa, type: 2}
+  moveSpeed: 0
 --- !u!1001 &1697212480
 Prefab:
   m_ObjectHideFlags: 0
@@ -493,11 +510,11 @@ Prefab:
         type: 2}
       propertyPath: response.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 137516156}
+      objectReference: {fileID: 137516155}
     - target: {fileID: 114785265792667620, guid: 5387b09b649049e4faa6b710fdaebb20,
         type: 2}
       propertyPath: response.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Dash
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114654377692535114, guid: 5387b09b649049e4faa6b710fdaebb20,
         type: 2}

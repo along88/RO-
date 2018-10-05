@@ -12,20 +12,6 @@ public class PlayerController : MonoBehaviour, IActor
     [SerializeField]
     private float moveSpeed;
 
-    
-
-    void Awake()
-    {
-        
-    }
-
-    void Start ()
-    {
-        
-
-
-
-    }
 
 	void Update ()
     {
