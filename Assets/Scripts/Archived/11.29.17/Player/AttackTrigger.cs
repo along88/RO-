@@ -11,6 +11,8 @@ public class AttackTrigger : TriggerManager
     private float maxHitCounter;
     [SerializeField]
     private BoxCollider attackCollider;
+
+    
     private void Awake()
     {
         InitializeMaxCounter(maxHitCounter);
@@ -43,11 +45,13 @@ public class AttackTrigger : TriggerManager
                 if (player.AttackCounter == 3 || !player.Opponent.IsGrounded)
                 {
                     player.Opponent.IsKnockedBack = true;
+                    
                     maxHitCounter = 0;
                 }
             }
             player.Opponent.IsHit = true;
             //lastHit = Time.time;
+            Instantiate(hitSFX,hitbox.bounds.center, hitbox.transform.rotation);
             attackCollider.enabled = false;
         }
         

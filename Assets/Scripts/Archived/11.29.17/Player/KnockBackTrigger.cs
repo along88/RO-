@@ -42,6 +42,8 @@ public class KnockBackTrigger : TriggerManager
                 //}
             }
             player.Opponent.IsHit = true;
+
+            Instantiate(hitSFX, hitbox.bounds.center, hitbox.transform.rotation);
             //lastHit = Time.time;
             knockBackCollider.enabled = false;
         }

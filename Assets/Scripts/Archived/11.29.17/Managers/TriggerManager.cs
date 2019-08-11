@@ -11,8 +11,10 @@ using UnityEngine;
         protected string opponentDefenseHitbox;
         [SerializeField]
         protected string opponentsHitbox;
+        [SerializeField]
+        internal GameObject hitSFX;
 
-        private void Start()
+    private void Start()
         {
             player = GetComponentInParent<Player>();
             opponentDefenseHitbox = string.Format( "BlockArea{0}",player.Opponent.ID.ToString());
