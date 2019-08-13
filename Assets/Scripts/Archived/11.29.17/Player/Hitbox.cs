@@ -23,6 +23,9 @@ public class Hitbox : MonoBehaviour
     private float delaySeconds;
     private WaitForSeconds delay;
 
+    [SerializeField]
+    private GameObject AttackVFX;
+
 
     public BoxCollider Torso
     {
@@ -111,6 +114,17 @@ public class Hitbox : MonoBehaviour
     {
         yield return delay;
         CloseHitBox();
+    }
+    #endregion
+
+    #region ATTACKVFX
+    public void EnableVFX()
+    {
+        AttackVFX.active = true;
+    }
+    public void DisableVFX()
+    {
+        AttackVFX.active = false;
     }
     #endregion
 }

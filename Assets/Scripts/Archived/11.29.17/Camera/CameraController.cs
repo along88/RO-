@@ -103,6 +103,7 @@ class CameraController : MonoBehaviour
         Camera.main.orthographic = true;
         Camera.main.transform.LookAt(target.position);
         Camera.main.fieldOfView = (defaultZoom + zoomIn);
+        
         //Time.timeScale = 1;
     }
     private void PositionHypeCamera(Transform target)
