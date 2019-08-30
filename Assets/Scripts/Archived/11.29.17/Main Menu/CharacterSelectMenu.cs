@@ -24,6 +24,9 @@ public class CharacterSelectMenu : MonoBehaviour
     [SerializeField]
     private UnityEngine.UI.Image p2Panel;
 
+    
+
+
 
     private void Awake()
     {
@@ -141,9 +144,9 @@ public class CharacterSelectMenu : MonoBehaviour
                 //change cpu icon to P2
                 audioSource.Play();
                 navIcons[1].transform.position = navIcons[2].transform.position;
-                navIcons[2].active = false;
-                navIcons[1].active = true;
-                MainGameManager.Instance.ActivePlayers = 2;
+                navIcons[2].SetActive(false);
+                navIcons[1].SetActive(true);
+            MainGameManager.Instance.ActivePlayers = 2;
                 p2Panel.color = Color.green;
 
 
@@ -214,10 +217,8 @@ public class CharacterSelectMenu : MonoBehaviour
 
     private bool P1ConfirmButton()
     {
-        bool buttonPressed = new bool();
-        if (Input.GetButtonDown("Attack1"))
-            buttonPressed = Input.GetButtonDown("Attack1");
-        return buttonPressed;
+        
+        return Input.GetButtonDown("Attack1"); ;
     }
     private bool P2ConfirmButton()
     {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class MainMenu : MonoBehaviour
     {
         nav.transform.position = (multiplayerButton.transform.position - new Vector3(175, 0, 0));
         audioSource = GetComponent<AudioSource>();
+        
     }
     private void Update()
     {
@@ -49,7 +51,7 @@ public class MainMenu : MonoBehaviour
         var quit = (quitButton.transform.position - new Vector3(175, 0, 0));
 
 
-        if (Navigation() > 0.0f)
+        if (Navigation() > 0.0f || Navigation2() > 0.0f)
         {
             audioSource.clip = navChime;
             if(nav.transform.position != multiplayer)
@@ -59,7 +61,7 @@ public class MainMenu : MonoBehaviour
             }
 
         }
-        else if (Navigation() < 0.0f)
+        else if (Navigation() < 0.0f || Navigation2() < 0.0f)
         {
             if (nav.transform.position != quit)
             {
@@ -87,13 +89,24 @@ public class MainMenu : MonoBehaviour
             
         }
     }
+
+    private float Navigation2()
+    {
+        return Input.GetAxis("NavV2");
+    }
+
     private float Navigation()
     {
-        return Input.GetAxis("NavV1");
+        
+            return Input.GetAxis("NavV1");
+        
+          
+
+
     }
     private bool ConfirmButton()
     {
-        bool buttonPressed = new bool();
+        bool buttonPressed = false;
         if (Input.GetButtonDown("Attack1"))
             buttonPressed = Input.GetButtonDown("Attack1");
         if (Input.GetButtonDown("Attack2"))

@@ -1019,7 +1019,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1265622221794042}
   m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 0.0176533, y: 0.8498313, z: 0.035120644}
+  m_LocalPosition: {x: 0.017653305, y: 0.8498332, z: 0.035120655}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4626878793873536}
@@ -1316,7 +1316,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4569986123777658}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -5.7813683, y: 121.09029, z: -92.94917}
+  m_LocalEulerAnglesHint: {x: -5.3843503, y: -90, z: 180}
 --- !u!1 &1313508404379168
 GameObject:
   m_ObjectHideFlags: 0
@@ -2473,7 +2473,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4569986123777658}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: -2.7990541, y: -171.75674, z: -117.37633}
+  m_LocalEulerAnglesHint: {x: 73.04078, y: -90, z: 180}
 --- !u!1 &1546060666145542
 GameObject:
   m_ObjectHideFlags: 0
@@ -2818,6 +2818,7 @@ MonoBehaviour:
   torso: {fileID: 65796040088931074}
   blockArea: {fileID: 65304236817875166}
   delaySeconds: 0
+  AttackVFX: {fileID: 0}
 --- !u!222 &222892772284409534
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3345,7 +3346,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 224153285773091172}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.000025720483, y: -90, z: -90}
+  m_LocalEulerAnglesHint: {x: 0.00002202428, y: -90, z: -90}
 --- !u!1 &1692018913616670
 GameObject:
   m_ObjectHideFlags: 0
