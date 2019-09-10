@@ -58,6 +58,8 @@ public class Hitbox : MonoBehaviour
         else
             attackHitBox.enabled = true;
         StartCoroutine("CloseHitBoxes"); // this disables the hitbox incase the animation event did not
+
+
         
     }
     private void CloseHitBox()
@@ -121,10 +123,20 @@ public class Hitbox : MonoBehaviour
     public void EnableVFX()
     {
         AttackVFX.active = true;
+        if (AttackVFX.GetComponent<ProjectileSpawner>())
+        {
+            var projectile = AttackVFX.GetComponent<ProjectileSpawner>();
+            projectile.enabled = true;
+        }
     }
     public void DisableVFX()
     {
         AttackVFX.active = false;
+        if (AttackVFX.GetComponent<ProjectileSpawner>())
+        {
+            var projectile = AttackVFX.GetComponent<ProjectileSpawner>();
+            projectile.enabled = false;
+        }
     }
     #endregion
 }

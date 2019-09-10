@@ -199,7 +199,14 @@ public class AnimationManager : MonoBehaviour
                    // attackDelay = .1f;
                 }
                 else
+                {
+
                     resetDelay = 0.8f;
+                    var projectile = GetComponent<ProjectileSpawner>();
+                    //need to pass which firePoint to use here
+                    projectile.SpawnFX(0);
+
+                }
 
             }
             else if (player.AttackCounter == 1)
@@ -214,7 +221,12 @@ public class AnimationManager : MonoBehaviour
                    // attackDelay = 1.0f;
                 }
                 else
+                {
                     resetDelay = 0.8f;
+                    var projectile = GetComponent<ProjectileSpawner>();
+                    projectile.SpawnFX(1);
+                }
+
             }
             else if (player.AttackCounter == 2)
             {

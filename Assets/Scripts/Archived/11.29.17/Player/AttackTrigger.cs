@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class ProjectileTrigger : TriggerManager
+{
+    protected override void ActivateTriggers(Collider opponentHitbox)
+    {
+        
+    }
+}
 public class AttackTrigger : TriggerManager
 {
     [SerializeField]
@@ -11,6 +18,7 @@ public class AttackTrigger : TriggerManager
     private float maxHitCounter;
     [SerializeField]
     private BoxCollider attackCollider;
+    private int maxAttacks = 3;
 
     
     private void Awake()
@@ -42,7 +50,7 @@ public class AttackTrigger : TriggerManager
                 //{
                 //    maxHitCounter = 0;
                 //}
-                if (player.AttackCounter == 3 || !player.Opponent.IsGrounded)
+                if (player.AttackCounter == maxAttacks || !player.Opponent.IsGrounded)
                 {
                     player.Opponent.IsKnockedBack = true;
                     

@@ -18,12 +18,14 @@ public class MainMenu : MonoBehaviour
     private GameObject nav;
     [SerializeField]
     private Vector2 defaultPosition;
-
+    
     private void Awake()
     {
         nav.transform.position = (multiplayerButton.transform.position - new Vector3(175, 0, 0));
         audioSource = GetComponent<AudioSource>();
-        
+
+
+
     }
     private void Update()
     {
@@ -58,6 +60,8 @@ public class MainMenu : MonoBehaviour
             {
                 audioSource.Play();
                 nav.transform.position = multiplayer;
+                quitButton.GetComponent<Animator>().enabled = false;
+                multiplayerButton.GetComponent<Animator>().enabled = true;
             }
 
         }
@@ -67,6 +71,8 @@ public class MainMenu : MonoBehaviour
             {
                 audioSource.Play();
                 nav.transform.position = quit;
+                multiplayerButton.GetComponent<Animator>().enabled = false;
+                quitButton.GetComponent<Animator>().enabled = true;
             }
         }
         else if (ConfirmButton())
@@ -77,12 +83,17 @@ public class MainMenu : MonoBehaviour
 
             if (nav.transform.position == quit)
             {
-
+                var colors = quitButton.colors;
+                colors.normalColor = Color.red;
+                quitButton.colors = colors;
                 QuitGame();
             }
             else if (nav.transform.position == multiplayer)
             {
                 //LoadLevel("RingMap");
+                var colors = multiplayerButton.colors;
+                colors.normalColor = Color.red;
+                multiplayerButton.colors = colors;
                 MainGameManager.Instance.ActivePlayers = 2;
                 SceneManager.LoadScene("CharacterSelectMenu");
             }

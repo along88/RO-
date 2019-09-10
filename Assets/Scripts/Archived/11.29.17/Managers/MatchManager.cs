@@ -150,6 +150,7 @@ using UnityEngine.UI;
     private void Start()
     {
         players = new Player[2];
+        playerBounds = GameObject.FindGameObjectWithTag("StageBounds");
         foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
         {
             if (player.GetComponent<Player>().ID == 1)
