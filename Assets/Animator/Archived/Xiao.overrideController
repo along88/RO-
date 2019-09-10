@@ -3,8 +3,9 @@
 --- !u!221 &22100000
 AnimatorOverrideController:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Xiao
   m_Controller: {fileID: 9100000, guid: 6d5fa0b654fbefc479cae33e9c6178f5, type: 2}
   m_Clips:
@@ -12,8 +13,6 @@ AnimatorOverrideController:
     m_OverrideClip: {fileID: 7400000, guid: de145c3393d622c44bad88ab1de5371d, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 9d09fbe11e1947c4b9b8b24196e09915, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: fe0a522b3764abe40bad28bbaea7e94f, type: 2}
-  - m_OriginalClip: {fileID: 7400004, guid: 2935f722a957d134b9bf22ab8de8b7b0, type: 3}
-    m_OverrideClip: {fileID: 7400000, guid: 1aa5ff49dcb769349a1bce60737bf139, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 3aa3be6b0a062494c9e6c7b436804e4d, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: d98fbfe613c62cd4394883f501018d04, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 6441c19074d5713489b8e4a356eb881b, type: 2}
@@ -50,3 +49,5 @@ AnimatorOverrideController:
     m_OverrideClip: {fileID: 7400000, guid: 97043716f5e79734e85377353b31ec8c, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 1dc4b4e0b146b824fb67cd59b0c2adbb, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: e4432500a4fad6b4081eee4f65133b03, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 113a1a56adeb90a479cd73397070c3b4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1aa5ff49dcb769349a1bce60737bf139, type: 2}

@@ -28,7 +28,7 @@ public class ProjectileSpawner : MonoBehaviour
         {
             fx = Instantiate(effectToSpawn, firePoint[firePointID].transform.position, Quaternion.identity);
 
-            Debug.Log("Parent Transform:"+ effectToSpawn.transform.parent.name.ToString());
+
         }
     }
 }
