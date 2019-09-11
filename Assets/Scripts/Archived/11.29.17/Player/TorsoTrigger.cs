@@ -6,7 +6,10 @@ using UnityEngine;
 
 public class TorsoTrigger : TriggerManager
 {
-    
+    private void Start()
+    {
+        GetComponenets();
+    }
     protected override void ActivateTriggers(Collider hitbox)
     {
         

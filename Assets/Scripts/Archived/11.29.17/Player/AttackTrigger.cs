@@ -20,11 +20,17 @@ public class AttackTrigger : TriggerManager
     private BoxCollider attackCollider;
     private int maxAttacks = 3;
 
-    
+    private void Start()
+    {
+        GetComponenets();
+    }
+
     private void Awake()
     {
+        
         InitializeMaxCounter(maxHitCounter);
         attackCollider = GetComponent<BoxCollider>();
+        
     }
     private void Update()
     {

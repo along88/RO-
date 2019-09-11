@@ -13,6 +13,8 @@ public class ProjectileSpawner : MonoBehaviour
     private GameObject effectToSpawn;
     private void Awake()
     {
+        
+        
         effectToSpawn = VFX[0];
        // SpawnFX();
         //OnAwake Instantiate A projectile Object
@@ -26,7 +28,9 @@ public class ProjectileSpawner : MonoBehaviour
 
         if(firePoint != null)
         {
-            fx = Instantiate(effectToSpawn, firePoint[firePointID].transform.position, Quaternion.identity);
+            effectToSpawn.GetComponent<projectileHitBox>().player = this.GetComponent<Player>();
+            fx = Instantiate(effectToSpawn, firePoint[firePointID].transform);
+           
 
 
         }

@@ -2,29 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class projectileHitBox : MonoBehaviour
+public class projectileHitBox : TriggerManager
 {
     [SerializeField]
     private Collider Hitbox;
-   void Hit()
+    public string parentTag;
+    [SerializeField]
+    private float speed;
+
+    private void Start()
     {
-        var cols = Physics.OverlapBox(Hitbox.bounds.center, Hitbox.bounds.extents, Hitbox.transform.rotation, LayerMask.GetMask("Hitbox"));
+        GetComponenets();
+    }
+    private void Update()
+    {
+        this.transform.position += Vector3.forward * speed * Time.deltaTime;
 
-        foreach (var hitbox in cols)
+    }
+
+    protected override void ActivateTriggers(Collider hitbox)
+    {
+        if (hitbox.name == opponentDefenseHitbox || hitbox.name == opponentsHitbox)
         {
+            player.HitDirection = player.transform.forward;
+            var cols = Physics.OverlapBox(Hitbox.bounds.center, Hitbox.bounds.extents, Hitbox.transform.rotation, LayerMask.GetMask("Hitbox"));
 
-            if (hitbox.transform.parent.parent.tag != this.tag)
+            foreach (var _hitbox in cols)
             {
-                //var opponent = hitbox.transform.GetComponentInParent<CombatManager>();
-                //opponent.Hit(Damage);
-                //Instantiate(hitspark, Hitbox.transform.position, hitbox.transform.rotation);
-                //hitConfirm = true;
-                //if (this.tag == TagList.PLAYER)
-                //    ActionSequenceManager.Initiate(this.gameObject, hitbox.transform.parent.parent.gameObject);
 
-                //break;
+                if (_hitbox.transform.parent.parent.tag != parentTag)
+                {
+                    Debug.Log(_hitbox.transform.parent.parent.tag + " hit!");
+
+                }
             }
         }
-
     }
 }

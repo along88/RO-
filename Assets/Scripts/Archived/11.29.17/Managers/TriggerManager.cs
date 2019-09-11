@@ -6,7 +6,7 @@ using UnityEngine;
 
     public abstract class TriggerManager : MonoBehaviour
     {
-        protected Player player;
+        public Player player;
         [SerializeField]
         protected string opponentDefenseHitbox;
         [SerializeField]
@@ -14,11 +14,9 @@ using UnityEngine;
         [SerializeField]
         internal GameObject hitSFX;
 
-    private void Start()
+        private void Start()
         {
-            player = GetComponentInParent<Player>();
-            opponentDefenseHitbox = string.Format( "BlockArea{0}",player.Opponent.ID.ToString());
-            opponentsHitbox = string.Format("Body{0}",player.Opponent.ID.ToString());
+            
         }
 
         private void OnTriggerEnter(Collider hitbox)
@@ -26,6 +24,12 @@ using UnityEngine;
             ActivateTriggers(hitbox);
         }
 
+        public void GetComponenets()
+        {
+            player = GetComponentInParent<Player>();
+            opponentDefenseHitbox = string.Format("BlockArea{0}", player.Opponent.ID.ToString());
+            opponentsHitbox = string.Format("Body{0}", player.Opponent.ID.ToString());
+        }
         protected abstract void ActivateTriggers(Collider opponentHitbox);
          
     }
