@@ -16,7 +16,7 @@ public class projectileHitBox : TriggerManager
     }
     private void Update()
     {
-        this.transform.position += Vector3.forward * speed * Time.deltaTime;
+        
 
     }
 

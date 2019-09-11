@@ -7,7 +7,7 @@ public class destroySelf : MonoBehaviour {
     float timer;
 	// Use this for initialization
 	void Awake () {
-        seconds = .5f;
+        //seconds = .5f;
         timer = Time.time;
 	}
 	
