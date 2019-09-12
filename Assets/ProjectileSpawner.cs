@@ -28,7 +28,7 @@ public class ProjectileSpawner : MonoBehaviour
 
         if(firePoint != null)
         {
-            effectToSpawn.GetComponent<projectileHitBox>().player = this.GetComponent<Player>();
+            //effectToSpawn.GetComponent<projectileHitBox>().player = this.GetComponent<Player>();
             fx = Instantiate(effectToSpawn, firePoint[firePointID].transform);
            
 

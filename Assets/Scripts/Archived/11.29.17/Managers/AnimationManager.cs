@@ -239,7 +239,12 @@ public class AnimationManager : MonoBehaviour
                     resetDelay = 1.5f;
                 }
                 else
+                {
                     resetDelay = 0.6f;
+                    var projectile = GetComponent<ProjectileSpawner>();
+                    projectile.SpawnFX(1);
+                }
+                    
 
             }
             else if (player.AttackCounter >= 3)
