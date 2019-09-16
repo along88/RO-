@@ -14,12 +14,12 @@ using UnityEngine;
         [SerializeField]
         internal GameObject hitSFX;
 
+        
         private void Start()
         {
-            
+            GetComponenets();
         }
-
-        private void OnTriggerEnter(Collider hitbox)
+    private void OnTriggerEnter(Collider hitbox)
         {
             ActivateTriggers(hitbox);
         }

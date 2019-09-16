@@ -10,10 +10,7 @@ public class projectileHitBox : TriggerManager
     [SerializeField]
     private float speed;
 
-    private void Start()
-    {
-        GetComponenets();
-    }
+    
     private void Update()
     {
         

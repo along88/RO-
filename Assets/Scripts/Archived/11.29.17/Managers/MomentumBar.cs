@@ -110,7 +110,7 @@ public class MomentumBar : MonoBehaviour
             {
                // playersTheme.clip = themeTwo;
                 //playersTheme.Play();
-                hypeText.text = "Player Two is HYPED!";
+               // hypeText.text = "Player Two is HYPED!";
                 players[1].IsTaunting = true;
                 players[1].IsHyped = true;
                 isHyped = true;

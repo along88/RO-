@@ -22,8 +22,9 @@ public class ProjectileSpawner : MonoBehaviour
 
     }
 
-    public void SpawnFX(int firePointID)
+    public void SpawnFX(int firePointID,int _VFX)
     {
+        effectToSpawn = VFX[_VFX];
         GameObject fx;
 
         if(firePoint != null)

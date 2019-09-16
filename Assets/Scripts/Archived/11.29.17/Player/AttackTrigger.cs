@@ -20,10 +20,7 @@ public class AttackTrigger : TriggerManager
     private BoxCollider attackCollider;
     private int maxAttacks = 3;
 
-    private void Start()
-    {
-        GetComponenets();
-    }
+    
 
     private void Awake()
     {
@@ -64,6 +61,7 @@ public class AttackTrigger : TriggerManager
                 }
             }
             player.Opponent.IsHit = true;
+            Debug.Log(player.Opponent.name + " is Attack Hit");
             //lastHit = Time.time;
             Instantiate(hitSFX,hitbox.bounds.center, hitbox.transform.rotation);
             attackCollider.enabled = false;

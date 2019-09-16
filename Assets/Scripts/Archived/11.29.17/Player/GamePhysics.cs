@@ -32,6 +32,12 @@ public class GamePhysics : MonoBehaviour
     protected float defaultSpeed;
     [SerializeField]
     protected float dashSpeed = 0.0f;
+    
+
+    private void Start()
+    {
+        defaultSpeed = speed;
+    }
     private void LateUpdate()
     {
         Jump();
@@ -57,7 +63,7 @@ public class GamePhysics : MonoBehaviour
 
     private void UpdatePositon()
     {
-        if (CanMove() && player.IsGrounded || !player.IsKnockedBack)
+        if (CanMove() && player.IsGrounded || !player.IsKnockedBack)  
         {
             if (!player.IsDefending && player.IsWalking)
                 transform.position += inputManager.Movement(player.ID) * speed * Time.deltaTime;
@@ -65,9 +71,10 @@ public class GamePhysics : MonoBehaviour
 
 
     }
+    
     private void UpdateRotation()
     {
-        if (!player.IsExhausted && !player.IsTaunting && inputManager.Movement(player.ID) != Vector3.zero)
+        if ( !player.IsKnockedBack &&!player.IsExhausted && !player.IsTaunting && inputManager.Movement(player.ID) != Vector3.zero)
             transform.forward = inputManager.Movement(player.ID);
 
             //rb.rotation = Quaternion.LookRotation(inputManager.Movement(player.ID));
@@ -123,7 +130,7 @@ public class GamePhysics : MonoBehaviour
 
     private IEnumerator GetUp()
     {
-
+        var HitDirection = player.Opponent.HitDirection;
         float knockBackForce = 10.0f;
         player.transform.forward = -player.Opponent.HitDirection;
         rb.position += player.Opponent.HitDirection * knockBackForce * Time.deltaTime;
@@ -135,16 +142,19 @@ public class GamePhysics : MonoBehaviour
 
     private IEnumerator HitKnockBack()
     {
+        var HitDirection = player.Opponent.HitDirection;
+        speed = 0f;
         player.IsWalking = false;
         player.CanMove = false;
 
         float knockBackForce = 200.0f;
-        player.transform.forward = -player.Opponent.HitDirection;
-        rb.position += player.Opponent.HitDirection * knockBackForce * Time.deltaTime;
+        player.transform.forward = -HitDirection;
+        rb.position += HitDirection * knockBackForce * Time.deltaTime;
         WaitForSeconds delay = new WaitForSeconds(0.01f);
         yield return delay;
         player.IsHit = false;
         player.CanMove = true;
+        speed = defaultSpeed;
     }
     private IEnumerator Dashing()
     {

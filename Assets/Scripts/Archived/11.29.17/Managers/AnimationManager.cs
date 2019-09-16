@@ -47,6 +47,7 @@ public class AnimationManager : MonoBehaviour
         HypeTaunt();
         HypeAttack();
         Attack();
+        Hit();
         IsFalling();
         Walk();
         Jump();
@@ -57,7 +58,7 @@ public class AnimationManager : MonoBehaviour
     private void LateUpdate()
     {
         IsKnockedBack();
-        Hit();
+        
     }
 
     private void IsFalling()
@@ -108,7 +109,7 @@ public class AnimationManager : MonoBehaviour
             {
                  player.CanBlock = false;
                 player.CanMove = false;
-                if (!player.IsHyped && !player.IsDefending && !player.IsDashing)
+                if (!player.IsHyped && !player.IsExhausted && !player.IsDefending && !player.IsDashing)
                 {
                    //player.IsAttacking = true;
                     AttackManager();
@@ -136,11 +137,17 @@ public class AnimationManager : MonoBehaviour
     {
         if ((inputManager.AttackButtonDown(player.ID)))
         {
-            if (player.IsHyped && player.IsGrounded && !player.IsDashing && !player.IsKnockedBack && !player.IsTaunting && !player.IsDefending)
+            if (player.IsHyped && player.IsGrounded && !player.IsDashing && !player.IsKnockedBack && !player.IsTaunting && !player.IsDefending && !player.IsHypeAttack)
             {
+                
                 
                 anim.Play("HypeAttack");
                 player.IsHypeAttack = true;
+                
+                var projectile = GetComponent<ProjectileSpawner>();
+                //need to pass which firePoint to use here
+               if( projectile != null)
+                    projectile.SpawnFX(3, 3);
                 StartCoroutine("ResetHype");
             }
         }
@@ -166,6 +173,7 @@ public class AnimationManager : MonoBehaviour
         {
            
             anim.Play("Hit");
+            //delay movement briefly
             //anim.PlayInFixedTime("Hit");
 
         }
@@ -182,7 +190,7 @@ public class AnimationManager : MonoBehaviour
     private void AttackManager()
     {
 
-        if (player.IsGrounded && !player.IsDashing)
+        if (!player.IsHypeAttack && player.IsGrounded && !player.IsDashing && !player.IsExhausted)
         {
 
 
@@ -204,7 +212,7 @@ public class AnimationManager : MonoBehaviour
                     resetDelay = 0.8f;
                     var projectile = GetComponent<ProjectileSpawner>();
                     //need to pass which firePoint to use here
-                    projectile.SpawnFX(0);
+                    projectile.SpawnFX(0,0);
 
                 }
 
@@ -224,7 +232,7 @@ public class AnimationManager : MonoBehaviour
                 {
                     resetDelay = 0.8f;
                     var projectile = GetComponent<ProjectileSpawner>();
-                    projectile.SpawnFX(1);
+                    projectile.SpawnFX(1,1);
                 }
 
             }
@@ -242,7 +250,7 @@ public class AnimationManager : MonoBehaviour
                 {
                     resetDelay = 0.6f;
                     var projectile = GetComponent<ProjectileSpawner>();
-                    projectile.SpawnFX(1);
+                    projectile.SpawnFX(2,2);
                 }
                     
 
@@ -259,7 +267,13 @@ public class AnimationManager : MonoBehaviour
                     // attackDelay = .1f;
                 }
                 else
+                {
                     resetDelay = 0.8f;
+                    var projectile = GetComponent<ProjectileSpawner>();
+                    //need to pass which firePoint to use here
+                    projectile.SpawnFX(0, 0);
+                }
+                    
             }
             
             
@@ -308,6 +322,9 @@ public class AnimationManager : MonoBehaviour
     //}
     private IEnumerator ExhaustReset()
     {
+        player.CanMove = false;
+        player.IsExhausted = true;
+
         WaitForEndOfFrame exhaustWait = new WaitForEndOfFrame();
         WaitForSeconds waitForSeconds = new WaitForSeconds(2.0f);
         yield return waitForSeconds;
@@ -323,10 +340,11 @@ public class AnimationManager : MonoBehaviour
     }
     private IEnumerator ResetHype()
     {
+        
         yield return hypeDelay;
         player.IsHyped = false;
         player.IsExhausted = true;
-        player.CanMove = true;
+        //player.CanMove = true;
         player.IsHypeAttack = false;
 
 

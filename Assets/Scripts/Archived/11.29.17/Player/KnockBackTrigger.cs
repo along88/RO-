@@ -11,6 +11,11 @@ public class KnockBackTrigger : TriggerManager
     private float maxHitCounter;
     [SerializeField]
     private BoxCollider knockBackCollider;
+
+    private void Start()
+    {
+        GetComponenets();
+    }
     private void Awake()
     {
         InitializeMaxCounter(maxHitCounter);
@@ -42,7 +47,7 @@ public class KnockBackTrigger : TriggerManager
                 //}
             }
             player.Opponent.IsHit = true;
-
+            Debug.Log(player.Opponent.name +" is KnockBack Hit");
             Instantiate(hitSFX, hitbox.bounds.center, hitbox.transform.rotation);
             //lastHit = Time.time;
             knockBackCollider.enabled = false;
