@@ -123,19 +123,21 @@ public class Hitbox : MonoBehaviour
     public void EnableVFX()
     {
         AttackVFX.active = true;
-        if (AttackVFX.GetComponent<ProjectileSpawner>())
+        var VFX = AttackVFX.GetComponent<ProjectileSpawner>();
+        if (VFX != null)
         {
-            var projectile = AttackVFX.GetComponent<ProjectileSpawner>();
-            projectile.enabled = true;
+
+            VFX.enabled = true;
         }
     }
     public void DisableVFX()
     {
         AttackVFX.active = false;
-        if (AttackVFX.GetComponent<ProjectileSpawner>())
+        var VFX = AttackVFX.GetComponent<ProjectileSpawner>();
+        if (VFX != null)
         {
-            var projectile = AttackVFX.GetComponent<ProjectileSpawner>();
-            projectile.enabled = false;
+
+            VFX.enabled = false;
         }
     }
     #endregion
