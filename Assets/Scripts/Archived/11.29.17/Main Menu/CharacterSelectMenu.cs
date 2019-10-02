@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class CharacterSelectMenu : MonoBehaviour
 {
+    
     private bool p1Confirmed;
     private bool p2Confirmed;
     private AudioSource audioSource;
@@ -24,16 +25,21 @@ public class CharacterSelectMenu : MonoBehaviour
     [SerializeField]
     private UnityEngine.UI.Image p2Panel;
 
+    private bool[] PlayerColorPriority = new bool[2] { false, false };
+
     
 
 
 
     private void Awake()
     {
+        
        audioSource = GetComponent<AudioSource>();
+
     }
     private void Start()
     {
+        //MainGameManager.Instance.playerColorPriority
         p1Confirmed = false;
         p2Confirmed = false;
         if (MainGameManager.Instance.ActivePlayers == 2)
@@ -67,12 +73,16 @@ public class CharacterSelectMenu : MonoBehaviour
                 audioSource.clip = navDeselect;
                 audioSource.Play();
                 p1Confirmed = false;
+                PlayerColorPriority[0] = false;
+
+
             }
             else if (Input.GetButtonDown("Jump2"))
             {
                 audioSource.clip = navDeselect;
                 audioSource.Play();
                 p2Confirmed = false;
+                PlayerColorPriority[1] = false;
             }
         }
 
@@ -87,10 +97,11 @@ public class CharacterSelectMenu : MonoBehaviour
             
     }
     public void LoadLevel(string level)
-    {
+    { 
         SceneManager.LoadScene(level);
+        
     }
-
+    
     private void P1Selection()
     {
         
@@ -123,13 +134,17 @@ public class CharacterSelectMenu : MonoBehaviour
                     audioSource.Play();
                     MainGameManager.Instance.Fighters[0] = Fighters.MARIE;
                     p1Confirmed = true;
-
+                    if (!PlayerColorPriority[1])
+                    PlayerColorPriority[0] = true;
                 }
                 else if (navIcons[0].transform.position == (characterSelection[1].transform.position - new Vector3(125, 0, 0)))
                 {
                     audioSource.Play();
                     MainGameManager.Instance.Fighters[0] = Fighters.DUKEZ;
                     p1Confirmed = true;
+                    if (!PlayerColorPriority[1])
+                        PlayerColorPriority[0] = true;
+
                 }
             }
             
@@ -182,12 +197,16 @@ public class CharacterSelectMenu : MonoBehaviour
                     audioSource.Play();
                     MainGameManager.Instance.Fighters[1] = Fighters.MARIE;
                     p2Confirmed = true;
+                    if (!PlayerColorPriority[0])
+                        PlayerColorPriority[1] = true;
                 }
                 else if (navIcons[1].transform.position == characterSelection[1].transform.position + new Vector3(125, 0, 0))
                 {
                     audioSource.Play();
                     MainGameManager.Instance.Fighters[1] = Fighters.DUKEZ;
                     p2Confirmed = true;
+                    if (!PlayerColorPriority[0])
+                        PlayerColorPriority[1] = true;
                 }
 
             }

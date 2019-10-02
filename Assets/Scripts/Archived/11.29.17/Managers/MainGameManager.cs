@@ -32,6 +32,7 @@ public class MainGameManager : MonoBehaviour
     private static int round;
     private static int[] playerVictories = new int[2];
     private static Fighters[] fighters = new Fighters[2];
+    public static bool[] playerColorPriority = new bool[2];
 
 
     public int ActivePlayers
@@ -53,6 +54,11 @@ public class MainGameManager : MonoBehaviour
     {
         get { return playerVictories; }
         set { playerVictories = value; }
+    }
+    public bool[] PlayerColorPriority
+    {
+        get { return playerColorPriority; }
+        set { playerColorPriority = value; }
     }
 
     void Start()
