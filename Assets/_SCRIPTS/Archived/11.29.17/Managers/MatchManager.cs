@@ -10,7 +10,8 @@ using UnityEngine.UI;
 
     class MatchManager : MonoBehaviour
     {
-    
+    [SerializeField]
+    private Sprite[] PlayerIcon;
     private Vector3 resumeButton;
     private Vector3 quitButton;
 
@@ -76,23 +77,14 @@ using UnityEngine.UI;
             switch (fighters[0])
             {
                 case global::Fighters.MARIE:
-                if (fighters[0] == fighters[1] && !priority[0])
-                {
-                    
-                    FighterModel[0] = Instantiate(prefabs[0], new Vector3(-39, 43, 10), Quaternion.LookRotation(Vector3.forward));
-                    FighterModel[0].GetComponent<Image>().material.color = Color.red; 
-                }
-               else
-                    FighterModel[0] = Instantiate(prefabs[0], new Vector3(-39, 43, 10), Quaternion.LookRotation(Vector3.forward));
-
-
-
+                FighterModel[0] = Instantiate(prefabs[0], new Vector3(-39, 43, 10), Quaternion.LookRotation(Vector3.forward));
+                FighterModel[0].GetComponentInChildren<SpriteRenderer>().sprite = PlayerIcon[0];
                 break;
             case global::Fighters.DUKEZ:
                 if (fighters[0] == fighters[1] && !priority[0])
                 {
                     FighterModel[0] = Instantiate(prefabs[1], new Vector3(-39, 43, 10), Quaternion.LookRotation(Vector3.forward));
-                    FighterModel[0].GetComponent<Image>().material.color = Color.red;
+                    //FighterModel[0].GetComponent<Image>().material.color = Color.red;
                 }
                 else
                     FighterModel[0] = Instantiate(prefabs[1], new Vector3(-39, 43, 10), Quaternion.LookRotation(Vector3.forward));
@@ -109,7 +101,7 @@ using UnityEngine.UI;
                     //fighters are the same, make p2 different color
                     FighterModel[1] = Instantiate(prefabs[0], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
 
-                    FighterModel[1].GetComponent<Image>().material.color = Color.red;
+                   // FighterModel[1].GetComponent<Image>().material.color = Color.red;
                 }
                 else
                     FighterModel[1] = Instantiate(prefabs[0], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
@@ -123,7 +115,7 @@ using UnityEngine.UI;
                 if (fighters[0] == fighters[1] && !priority[1])
                 {
                     FighterModel[1] = Instantiate(prefabs[1], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
-                    FighterModel[1].GetComponent<Image>().material.color = Color.red;
+                //    FighterModel[1].GetComponent<Image>().material.color = Color.red;
                 }
                 else
                     FighterModel[1] = Instantiate(prefabs[1], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
@@ -131,7 +123,11 @@ using UnityEngine.UI;
             default:
                 break;
         }
-        }
+        FighterModel[0].GetComponentInChildren<SpriteRenderer>().sprite = PlayerIcon[0];
+        FighterModel[0].GetComponentInChildren<SpriteRenderer>().color = Color.red;
+        FighterModel[1].GetComponentInChildren<SpriteRenderer>().sprite = PlayerIcon[1];
+        FighterModel[1].GetComponentInChildren<SpriteRenderer>().color = Color.green;
+    }
     private void Awake()
     {
         SelectFighter(MainGameManager.Instance.Fighters);
