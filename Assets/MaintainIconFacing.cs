@@ -16,5 +16,12 @@ public class MaintainIconFacing : MonoBehaviour
     {
         //maintain facing at all times here
         this.transform.rotation = facing;
+        
+    }
+
+    public void UpdateFacing(Quaternion newFacing)
+    {
+        facing = newFacing;
+        Debug.Log(facing.ToString());
     }
 }
