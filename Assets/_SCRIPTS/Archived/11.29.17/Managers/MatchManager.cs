@@ -12,22 +12,16 @@ class MatchManager: Manager
 {
     [SerializeField]
     private Sprite[] PlayerIcon;
-        
-
-    //private float BGMLastTime;
-    //private float hypeMusicLastTime;
+    private Button[] matchSetButtons;
     private Vector3 cameraPosition;
         
         
     private Camera matchSetcamera;
     private Camera mainCamera;
     private Image uiTime;
-        
-        
-        
-        
     private GameObject MatchSetMenuObject;
-        
+    private GameObject pauseMenuObject;
+
     [SerializeField]
     private float matchTimer;
     [SerializeField]
@@ -36,15 +30,11 @@ class MatchManager: Manager
     //private Rounds rounds;
     [SerializeField]
     private float match;
-    [SerializeField]
-    private Player[] players;
+    
     [SerializeField]
     private Text ringOutText;
     private AudioManager[] playersTheme;
-    [SerializeField]
-    private AudioSource audioSource;
-    [SerializeField]
-    private AudioSource menuSFX;
+    
     Manager pauseMenu;
 
     [SerializeField]
@@ -59,7 +49,7 @@ class MatchManager: Manager
 
     public GameObject[] FighterModel;
     public float Match { get { return match; } set { match = value; } }
-    // public Rounds Rounds { get { return rounds; } set { rounds = value; } }
+    private bool matchDefaultPosition;
 
     private void SelectFighter(Fighters[] fighters)
     {
@@ -71,48 +61,41 @@ class MatchManager: Manager
             //FighterModel[0].GetComponentInChildren<SpriteRenderer>().sprite = PlayerIcon[0];
             break;
             case global::Fighters.DUKEZ:
-                
                 FighterModel[0] = Instantiate(prefabs[1], new Vector3(-39, 43, 10), Quaternion.LookRotation(Vector3.forward));
                 FighterModel[0].GetComponentInChildren<MaintainIconFacing>().facing = new Quaternion(0, 0, 0, 0f);
-
-                
             break;
         default:
             break;
     }
         switch (fighters[1])
-    {
-        case Fighters.MARIE:
-            if (fighters[0] == fighters[1] && !priority[1])
-            {
-                //fighters are the same, make p2 different color
-                FighterModel[1] = Instantiate(prefabs[0], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
-                    
-                // FighterModel[1].GetComponent<Image>().material.color = Color.red;
-            }
-            else
-                FighterModel[1] = Instantiate(prefabs[0], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
-            if (MainGameManager.Instance.ActivePlayers == 2)
-                FighterModel[1].GetComponent<Player>().ID = 2;
-            else
-                FighterModel[1].GetComponent<Player>().ID = 0;
-            var IconRotation = FighterModel[1].GetComponentInChildren<MaintainIconFacing>().facing;
-            FighterModel[1].GetComponentInChildren<MaintainIconFacing>().facing = new Quaternion(0, 0, 0, 180);
-
-
-            break;
-        case Fighters.DUKEZ:
-            if (fighters[0] == fighters[1] && !priority[1])
-            {
-                FighterModel[1] = Instantiate(prefabs[1], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
-            //    FighterModel[1].GetComponent<Image>().material.color = Color.red;
-            }
-            else
-                FighterModel[1] = Instantiate(prefabs[1], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
-            break;
-        default:
-            break;
-    }
+        {
+            case Fighters.MARIE:
+                if (fighters[0] == fighters[1] && !priority[1])
+                {
+                    //fighters are the same, make p2 different color
+                    FighterModel[1] = Instantiate(prefabs[0], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
+                }
+                else
+                    FighterModel[1] = Instantiate(prefabs[0], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
+                if (MainGameManager.Instance.ActivePlayers == 2)
+                    FighterModel[1].GetComponent<Player>().ID = 2;
+                else
+                    FighterModel[1].GetComponent<Player>().ID = 0;
+                var IconRotation = FighterModel[1].GetComponentInChildren<MaintainIconFacing>().facing;
+                FighterModel[1].GetComponentInChildren<MaintainIconFacing>().facing = new Quaternion(0, 0, 0, 180);
+               break;
+            case Fighters.DUKEZ:
+                if (fighters[0] == fighters[1] && !priority[1])
+                {
+                    FighterModel[1] = Instantiate(prefabs[1], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
+                //    FighterModel[1].GetComponent<Image>().material.color = Color.red;
+                }
+                else
+                    FighterModel[1] = Instantiate(prefabs[1], new Vector3(9, 43, 10), Quaternion.LookRotation(Vector3.back));
+                break;
+            default:
+                break;
+        }
         FighterModel[0].GetComponentInChildren<SpriteRenderer>().sprite = PlayerIcon[0];
         FighterModel[0].GetComponentInChildren<SpriteRenderer>().color = Color.red;
         FighterModel[1].GetComponentInChildren<SpriteRenderer>().sprite = PlayerIcon[1];
@@ -126,6 +109,12 @@ class MatchManager: Manager
         
     private void Awake()
     {
+        var foundPlayers = new List<Player>();
+        // InitializeButtons();
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+            foundPlayers.Add(player.GetComponent<Player>());
+
+        players = foundPlayers.ToArray();
         SelectFighter(MainGameManager.Instance.Fighters);
         AssignOpponent();
         InitializeComponents();
@@ -142,7 +131,7 @@ class MatchManager: Manager
     private void Update()
     {
         RoundTimer();
-        pauseMenu.PauseMenu();
+        PauseMenu();
         RingOutVictory();
             
         AudioSourceManager audio = new AudioSourceManager();
@@ -245,13 +234,6 @@ class MatchManager: Manager
         }
         matchSetcamera.enabled = false;
     }
-        
-        
-        
-        
-        
-        
-
     private void RingOutVictory()
     {
         if (!isMatchOver)
@@ -292,8 +274,6 @@ class MatchManager: Manager
             }
         }
     }
-        
-
     private IEnumerator MatchSetDelay()
     {
         Debug.Log("Match");
@@ -317,9 +297,6 @@ class MatchManager: Manager
             StartCoroutine("VictoryTaunt", 1);
         }
     }
-       
-   
-       
     IEnumerator VictoryTaunt(int player)
     {
 
@@ -335,8 +312,8 @@ class MatchManager: Manager
     //    StartCoroutine("MatchSetNavigation");
     if (MainGameManager.Instance.PlayerVictories[player] >= 1)
     {
-        Manager matchMenu = new Manager();
-        matchMenu.MatchSetNavigation();
+        
+        MatchSetNavigation();
     }
 
     else
@@ -351,8 +328,203 @@ class MatchManager: Manager
     }
 
     }
-        
-    
+    protected  void InitializeButtons()
+    {
+        //Match Set Menu - make this it's own class that inherits from Menu
+        MatchSetMenuObject = GameObject.FindGameObjectWithTag("MatchMenu");
+        matchSetButtons = new Button[2];
+        foreach (Button button in MatchSetMenuObject.GetComponentsInChildren<Button>())
+            if (button.name.ToLower() == string.Format("rematch"))
+                matchSetButtons[0] = button;
+            else
+                matchSetButtons[1] = button;
+        MatchSetMenuObject.SetActive(false);
+
+        //Pause Menu
+        pauseMenuObject = GameObject.FindGameObjectWithTag("ShowOnPause");
+        pauseButtons = new Button[2];
+        foreach (Button button in pauseMenuObject.GetComponentsInChildren<Button>())
+            if (button.name.ToLower() == string.Format("resume"))
+                pauseButtons[0] = button;
+            else
+                pauseButtons[1] = button;
+        pauseMenuObject.SetActive(false);
+
+
+
+
+        //Navigation Object
+        nav = GameObject.FindGameObjectWithTag("Nav");
+        nav.transform.position = (pauseButtons[0].transform.position - new Vector3(130, 0, 0));
+        nav.SetActive(false);
+    }
+    public void MatchSetNavigation()
+    {
+
+        MatchSetMenuObject.SetActive(true);
+        nav.active = true;
+        if (!matchDefaultPosition)
+        {
+            nav.transform.position = (matchSetButtons[0].transform.position - new Vector3(100, 15.0f, 0));
+            matchDefaultPosition = true;
+        }
+
+        var text = MatchSetMenuObject.GetComponentInChildren<Text>();
+        if (isPlayerOneVictory)
+        {
+            players[1].gameObject.SetActive(false);
+            text.text = string.Format(players[0].name + " Wins!");
+        }
+        else
+        {
+            players[0].gameObject.SetActive(false);
+            text.text = string.Format(players[1].name + " Wins!");
+        }
+
+
+        Time.timeScale = 0.01f;
+        StartCoroutine("PauseNavigation");
+
+    }
+    IEnumerator PauseNavigation()
+    {
+        if (isMatchOver)
+        {
+            while (MatchSetMenuObject.activeSelf)
+            {
+                float pauseEndTime = Time.realtimeSinceStartup + 1f;
+                while (Time.realtimeSinceStartup < pauseEndTime)
+                {
+
+                    yield return 0;
+                    PauseControls();
+
+                }
+
+            }
+        }
+        else
+        {
+            while (pauseMenuObject.activeSelf)
+            {
+                float pauseEndTime = Time.realtimeSinceStartup + 1f;
+                while (Time.realtimeSinceStartup < pauseEndTime)
+                {
+
+                    yield return 0;
+                    PauseControls();
+
+                }
+
+            }
+        }
+    }
+    private void PauseControls()
+    {
+
+
+        if (isMatchOver)
+        {
+
+            Debug.Log(matchSetButtons[0].name);
+            resumeButton = (matchSetButtons[0].transform.position - new Vector3(130, 10.0f, 0));
+            quitButton = (matchSetButtons[1].transform.position - new Vector3(150, 1, 0));
+
+            //nav.transform.parent = MatchSetMenuObject.transform;
+        }
+        else
+        {
+            resumeButton = (pauseButtons[0].transform.position - new Vector3(110, 0, 0));
+            quitButton = (pauseButtons[1].transform.position - new Vector3(110, 0, 0));
+        }
+
+        if (Navigation() > 0.0f)
+        {
+            menuSFX.clip = navChime;
+            if (nav.transform.position != resumeButton)
+            {
+                nav.transform.position = resumeButton;
+                Debug.Log("Nav Moved!");
+                menuSFX.Play();
+            }
+
+        }
+        else if (Navigation() < 0.0f)
+        {
+            menuSFX.clip = navChime;
+            if (nav.transform.position != quitButton)
+            {
+                nav.transform.position = quitButton;
+                menuSFX.Play();
+            }
+
+        }
+        else if (ConfirmButton())
+        {
+
+            menuSFX.clip = navConfirm;
+            if (isPaused)
+                menuSFX.Play();
+
+
+            if (nav.transform.position == quitButton)
+            {
+                nav.active = false;
+                SceneManager.LoadScene("Main Menu");
+
+                Time.timeScale = 1.0f;
+
+            }
+            else
+            {
+                if (isMatchOver)
+                {
+                    //rounds.ClearRounds();
+                    MainGameManager.Instance.ClearRounds();
+                    nav.active = false;
+                    if (MainGameManager.Instance.ActivePlayers == 2)
+                        SceneManager.LoadScene("Multiplayer");
+                    else
+                        SceneManager.LoadScene("SinglePlayer");
+                }
+
+                Time.timeScale = 1.0f;
+                isPaused = false;
+                pauseMenuObject.SetActive(false);
+                nav.active = false;
+
+            }
+        }
+
+    }
+    private bool PauseButton()
+    {
+        return Input.GetButtonDown("Submit");
+    }
+    public void PauseMenu()
+    {
+        if (PauseButton() && !isMatchOver)
+        {
+            if (!isPaused)
+            {
+
+                Time.timeScale = 0.0f;
+                isPaused = true;
+                audioSource.Pause();
+                pauseMenuObject.SetActive(true);
+                nav.active = true;
+                StartCoroutine("PauseNavigation");
+            }
+
+
+        }
+    }
+    private float Navigation()
+    {
+        return Input.GetAxis("NavV2");
+    }
+
+
 }
 
     
