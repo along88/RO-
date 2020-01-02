@@ -35,13 +35,14 @@ class MatchManager: Manager
     private Text ringOutText;
     private AudioManager[] playersTheme;
     
-    Manager pauseMenu;
+    GameObject pauseMenu;
 
     [SerializeField]
     Image ringOut;
     [SerializeField]
     private GameObject playerBounds;
-        
+
+    private AudioSourceManager asm;
 
 
     [SerializeField]
@@ -118,15 +119,39 @@ class MatchManager: Manager
         SelectFighter(MainGameManager.Instance.Fighters);
         AssignOpponent();
         InitializeComponents();
-        pauseMenu = new Manager();
+        //pauseMenu = new Manager();
 
 }
     private void Start()
     {
-        playerBounds = GameObject.FindGameObjectWithTag("StageBounds");
+        GetPlayers();
             
         GetCameras();
 
+    }
+    private void GetPlayers()
+    {
+        asm = new AudioSourceManager();
+        players = new Player[2];
+        playerBounds = GameObject.FindGameObjectWithTag("StageBounds");
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (player.GetComponent<Player>().ID == 1)
+            {
+                players[0] = player.GetComponent<Player>();
+                asm.playerOneTheme = player.GetComponent<AudioManager>().hypeMusic;
+                //playersTheme[0] = player.GetComponent<AudioManager>();
+            }
+            else
+            {
+                players[1] = player.GetComponent<Player>();
+                asm.playerTwoTheme = player.GetComponent<AudioManager>().hypeMusic;
+                // playersTheme[1] = player.GetComponent<AudioManager>();
+            }
+
+            //rounds = 0;
+
+        }
     }
     private void Update()
     {
@@ -141,12 +166,19 @@ class MatchManager: Manager
     private void InitializeComponents()
     {
         //stageTheme = GetComponent<AudioSource>().clip;
+        pauseMenu = GameObject.FindGameObjectWithTag("ShowOnPause");
+        MatchSetMenuObject = GameObject.FindGameObjectWithTag("MatchMenu");
+        nav = GameObject.FindGameObjectWithTag("Nav");
+        nav.SetActive(false);
+        MatchSetMenuObject.SetActive(false);
+        pauseMenu.SetActive(false);
         ringOut.enabled = false;
         audioSource = GetComponent<AudioSource>();
         menuSFX = GetComponent<AudioSource>();
         uiTime = GameObject.Find("Time").GetComponent<Image>();
         uiTime.enabled = false;
         matchTimerText = GetComponentInChildren<Text>();
+        
             
             
     }
@@ -331,7 +363,7 @@ class MatchManager: Manager
     protected  void InitializeButtons()
     {
         //Match Set Menu - make this it's own class that inherits from Menu
-        MatchSetMenuObject = GameObject.FindGameObjectWithTag("MatchMenu");
+        
         matchSetButtons = new Button[2];
         foreach (Button button in MatchSetMenuObject.GetComponentsInChildren<Button>())
             if (button.name.ToLower() == string.Format("rematch"))
@@ -354,7 +386,7 @@ class MatchManager: Manager
 
 
         //Navigation Object
-        nav = GameObject.FindGameObjectWithTag("Nav");
+        
         nav.transform.position = (pauseButtons[0].transform.position - new Vector3(130, 0, 0));
         nav.SetActive(false);
     }

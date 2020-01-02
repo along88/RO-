@@ -14,9 +14,9 @@ public class AudioSourceManager : Manager
     [SerializeField]
     private AudioClip stageTheme;
     [SerializeField]
-    private AudioClip playerOneTheme;
+    public AudioClip playerOneTheme;
     [SerializeField]
-    private AudioClip playerTwoTheme;
+    public AudioClip playerTwoTheme;
     private AudioClip[] playersHypeTheme;
     [SerializeField]
 

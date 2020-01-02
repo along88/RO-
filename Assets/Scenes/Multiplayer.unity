@@ -148,6 +148,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7125976279730068745, guid: c9031b4ac5340c84d947c48e88e90aa4,
         type: 3}
+    - target: {fileID: 114157868509667592, guid: f8654641abdd7f844a6c79634d0058d6,
+        type: 3}
+      propertyPath: menuSFX
+      value: 
+      objectReference: {fileID: 1479538206}
     - target: {fileID: 114571332450069644, guid: f8654641abdd7f844a6c79634d0058d6,
         type: 3}
       propertyPath: m_UseSpriteMesh
@@ -342,6 +347,18 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1697536192829306, guid: f8654641abdd7f844a6c79634d0058d6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1359411076600082, guid: f8654641abdd7f844a6c79634d0058d6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1959226103993850, guid: f8654641abdd7f844a6c79634d0058d6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8654641abdd7f844a6c79634d0058d6, type: 3}
@@ -653,6 +670,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22dc22d6461fd7c46b482b82df44acf0, type: 3}
+--- !u!82 &1479538206 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 82020377112187490, guid: f8654641abdd7f844a6c79634d0058d6,
+    type: 3}
+  m_PrefabInstance: {fileID: 62632011}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1578327680
 PrefabInstance:
   m_ObjectHideFlags: 0
