@@ -40,16 +40,18 @@ public class GamePhysics : MonoBehaviour
     }
     private void LateUpdate()
     {
-        Jump();
-        Gravity();
-        AttackMovementRestriction();
-        Hit();
-        KnockedBack();
-        Dash();
-        UpdatePositon();
-        UpdateRotation();
-        RingOut();
-
+        if (Time.timeScale != 0.0f)
+        {
+            Jump();
+            Gravity();
+            AttackMovementRestriction();
+            Hit();
+            KnockedBack();
+            Dash();
+            UpdatePositon();
+            UpdateRotation();
+            RingOut();
+        }
     }
 
     private void AttackMovementRestriction()

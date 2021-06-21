@@ -320,7 +320,7 @@ using UnityEngine.UI;
         if (isMatchOver)
         {
             
-            Debug.Log(matchSetButtons[0].name);
+            //Debug.Log(matchSetButtons[0].name);
             resumeButton = (matchSetButtons[0].transform.position - new Vector3(130, 10.0f, 0));
             quitButton = (matchSetButtons[1].transform.position - new Vector3(150, 1, 0));
 
@@ -407,7 +407,7 @@ using UnityEngine.UI;
     private float Navigation()
     {
 
-        return Input.GetAxis("NavV2");
+        return Input.GetAxis("NavV1");
     }
 
     private void RingOutVictory()
@@ -454,6 +454,7 @@ using UnityEngine.UI;
     {
         if (isMatchOver)
         {
+            
             if (isPlayerOneVictory)
                 audioSource.clip = playerOneTheme;
             else
@@ -565,7 +566,10 @@ using UnityEngine.UI;
         //if (rounds.playerVictories[player] >= 1)
         //    StartCoroutine("MatchSetNavigation");
         if (MainGameManager.Instance.PlayerVictories[player] >= 1)
+        {
+            Time.timeScale = 0.0f;
             MatchSetNavigation();
+        }
         else
         {
             MainGameManager.Instance.Rounds++;
