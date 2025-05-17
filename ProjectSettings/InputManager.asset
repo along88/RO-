@@ -427,8 +427,8 @@ InputManager:
     descriptiveNegativeName: Navigate menus
     negativeButton: s
     positiveButton: w
-    altNegativeButton: 
-    altPositiveButton: 
+    altNegativeButton: x
+    altPositiveButton: z
     gravity: 1
     dead: 0.3
     sensitivity: 1
@@ -443,6 +443,22 @@ InputManager:
     descriptiveNegativeName: Move 2nd player to the Left
     negativeButton: down
     positiveButton: up
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1
+    dead: 0.3
+    sensitivity: 1
+    snap: 1
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 2
+  - serializedVersion: 3
+    m_Name: Attack1
+    descriptiveName: Move 2nd player to the Right
+    descriptiveNegativeName: Move 2nd player to the Left
+    negativeButton: enter
+    positiveButton: enter
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1

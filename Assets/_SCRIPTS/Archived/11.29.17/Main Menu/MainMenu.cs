@@ -118,10 +118,10 @@ public class MainMenu : MonoBehaviour
     private bool ConfirmButton()
     {
         bool buttonPressed = false;
-        if (Input.GetButtonDown("Attack1"))
-            buttonPressed = Input.GetButtonDown("Attack1");
-        if (Input.GetButtonDown("Attack2"))
-            buttonPressed = Input.GetButtonDown("Attack2");
+
+        if (Input.GetButtonDown("Attack1") || Input.GetButtonDown("Attack2") )
+            buttonPressed = true;
+        
         return buttonPressed;
     }
 }
