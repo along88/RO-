@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class BlockGauge : MonoBehaviour
 {
+
     private InputManager inputManager;
     private Player player;
     public float blockGauge;
@@ -12,7 +13,13 @@ public class BlockGauge : MonoBehaviour
     private Image jammerText;
     private bool canBlock;
     private bool isRecharging;
-    
+    [SerializeField] private float gaugeRechargeRate = 25f;
+    private Coroutine gaugeRechargeCoroutine;
+
+    public bool IsRecharging
+    {
+        get { return isRecharging; }
+    }
 
     private void Awake()
     {
@@ -37,7 +44,10 @@ public class BlockGauge : MonoBehaviour
         
         BlockGaugeSlider();
         DashGaugeDrain();
-        GaugeRecharge();
+        //BlockRecharge();
+        if (gaugeSlider.value <= gaugeSlider.minValue && !isRecharging)
+            StartGaugeRecharge();
+        
         RechargeEcho();
     }
 
@@ -51,10 +61,19 @@ public class BlockGauge : MonoBehaviour
     //            player.IsDefending = false;
     //    }
     //}
+    private void StartGaugeRecharge()
+    {
+        // Prevent multiple copies of the coroutine from running.
+        if (gaugeRechargeCoroutine != null)
+        {
+            return;
+        }
 
+        gaugeRechargeCoroutine = StartCoroutine(GaugeRecharge());
+    }
     private void BlockGaugeSlider()
     {
-        if (player.IsDefending && player.CanBlock)
+        if (player.IsDefending)
         {
            
             gaugeSlider.value--;
@@ -62,7 +81,7 @@ public class BlockGauge : MonoBehaviour
             {
                 gaugeSlider.value = gaugeSlider.minValue;
                 player.CanBlock = false;
-                isRecharging = true;
+               
             }
         }
         
@@ -71,7 +90,7 @@ public class BlockGauge : MonoBehaviour
 
     }
 
-    private void GaugeRecharge()
+    private void BlockRecharge()
     {
         
          if (gaugeSlider.value <= gaugeSlider.minValue)
@@ -89,8 +108,47 @@ public class BlockGauge : MonoBehaviour
             
 
         }
-    }
 
+        
+        
+    }
+    private IEnumerator GaugeRecharge()
+    {
+        isRecharging = true;
+
+        player.CanBlock = false;
+        player.CanDash = false;
+
+        jammerText.enabled = true;
+
+        // Cancel currently active actions.
+        player.IsDefending = false;
+        player.IsDashing = false;
+
+        while (gaugeSlider.value < gaugeSlider.maxValue)
+        {
+                gaugeSlider.value = Mathf.MoveTowards(
+                gaugeSlider.value,
+                gaugeSlider.maxValue,
+                gaugeRechargeRate * Time.deltaTime
+            );
+            player.CanBlock = false;
+            player.CanDash = false;
+
+            // Pause here and continue on the following frame.
+            yield return null;
+        }
+
+        gaugeSlider.value = gaugeSlider.maxValue;
+
+        isRecharging = false;
+
+        player.CanBlock = true;
+        player.CanDash = true;
+
+        jammerText.enabled = false;
+        gaugeRechargeCoroutine = null;
+    }
     private void DashGaugeDrain()
     {
 

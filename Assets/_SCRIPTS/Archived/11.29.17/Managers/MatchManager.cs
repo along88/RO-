@@ -12,15 +12,16 @@ class MatchManager: Manager
 {
     [SerializeField]
     private Sprite[] PlayerIcon;
-    private Button[] matchSetButtons;
+    public Button[] matchSetButtons;
     private Vector3 cameraPosition;
-        
-        
+    //private AudioSourceManager asm;
+
+
     private Camera matchSetcamera;
     private Camera mainCamera;
     private Image uiTime;
     private GameObject MatchSetMenuObject;
-    private GameObject pauseMenuObject;
+    //private GameObject pauseMenuObject;
 
     [SerializeField]
     private float matchTimer;
@@ -33,7 +34,7 @@ class MatchManager: Manager
     
     [SerializeField]
     private Text ringOutText;
-    private AudioManager[] playersTheme;
+    private AudioClip[] playersTheme;
     
     GameObject pauseMenu;
 
@@ -42,7 +43,7 @@ class MatchManager: Manager
     [SerializeField]
     private GameObject playerBounds;
 
-    private AudioSourceManager asm;
+    //private AudioSourceManager asm;
 
 
     [SerializeField]
@@ -100,25 +101,31 @@ class MatchManager: Manager
         FighterModel[0].GetComponentInChildren<SpriteRenderer>().sprite = PlayerIcon[0];
         FighterModel[0].GetComponentInChildren<SpriteRenderer>().color = Color.red;
         FighterModel[1].GetComponentInChildren<SpriteRenderer>().sprite = PlayerIcon[1];
-        FighterModel[1].GetComponentInChildren<SpriteRenderer>().color = Color.green;
+        FighterModel[1].GetComponentInChildren<SpriteRenderer>().color = Color.blue;
+        
         FighterModel[0].GetComponent<Player>().ID = 1;
-        if (MainGameManager.Instance.ActivePlayers == 2)
-            FighterModel[1].GetComponent<Player>().ID = 2;
-        else
-            FighterModel[1].GetComponent<Player>().ID = 0;
+        FighterModel[1].GetComponent<Player>().ID = 2;
+        //if (MainGameManager.Instance.ActivePlayers == 2)
+        //    FighterModel[1].GetComponent<Player>().ID = 2;
+        //else
+        //    FighterModel[1].GetComponent<Player>().ID = 0;
     }
         
     private void Awake()
     {
+        SelectFighter(MainGameManager.Instance.Fighters);
+        AssignOpponent();
+        InitializeComponents();
+        InitializeButtons();
+
         var foundPlayers = new List<Player>();
         // InitializeButtons();
         foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
             foundPlayers.Add(player.GetComponent<Player>());
 
         players = foundPlayers.ToArray();
-        SelectFighter(MainGameManager.Instance.Fighters);
-        AssignOpponent();
-        InitializeComponents();
+        MainGameManager.Instance.ActivePlayers = players.Count();
+        
         //pauseMenu = new Manager();
 
 }
@@ -131,7 +138,7 @@ class MatchManager: Manager
     }
     private void GetPlayers()
     {
-        asm = new AudioSourceManager();
+        
         players = new Player[2];
         playerBounds = GameObject.FindGameObjectWithTag("StageBounds");
         foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
@@ -139,14 +146,14 @@ class MatchManager: Manager
             if (player.GetComponent<Player>().ID == 1)
             {
                 players[0] = player.GetComponent<Player>();
-                asm.playerOneTheme = player.GetComponent<AudioManager>().hypeMusic;
-                //playersTheme[0] = player.GetComponent<AudioManager>();
+                //asm.playerOneTheme = player.GetComponent<AudioManager>().hypeMusic;
+                playersTheme[0] = player.GetComponent<AudioManager>().hypeMusic;
             }
             else
             {
                 players[1] = player.GetComponent<Player>();
-                asm.playerTwoTheme = player.GetComponent<AudioManager>().hypeMusic;
-                // playersTheme[1] = player.GetComponent<AudioManager>();
+                //asm.playerTwoTheme = player.GetComponent<AudioManager>().hypeMusic;
+                playersTheme[1] = player.GetComponent<AudioManager>().hypeMusic;
             }
 
             //rounds = 0;
@@ -158,14 +165,18 @@ class MatchManager: Manager
         RoundTimer();
         PauseMenu();
         RingOutVictory();
-            
-        AudioSourceManager audio = new AudioSourceManager();
-        
+        if (players[0].IsHyped)
+        {
+            StartCoroutine("HypeTaunt",0); 
+        }
+        //AudioSourceManager audio = new AudioSourceManager();
+
     }
         
     private void InitializeComponents()
     {
         //stageTheme = GetComponent<AudioSource>().clip;
+        //asm = GetComponent<AudioManager>();
         pauseMenu = GameObject.FindGameObjectWithTag("ShowOnPause");
         MatchSetMenuObject = GameObject.FindGameObjectWithTag("MatchMenu");
         nav = GameObject.FindGameObjectWithTag("Nav");
@@ -178,9 +189,11 @@ class MatchManager: Manager
         uiTime = GameObject.Find("Time").GetComponent<Image>();
         uiTime.enabled = false;
         matchTimerText = GetComponentInChildren<Text>();
-        
-            
-            
+        playersTheme = new AudioClip[2];
+
+
+
+
     }
 
     private void AssignOpponent()
@@ -304,11 +317,18 @@ class MatchManager: Manager
 
 
             }
+
         }
+        else
+        {
+            StartCoroutine("MatchSetDelay", 0);
+        }
+        
     }
     private IEnumerator MatchSetDelay()
     {
         Debug.Log("Match");
+        
         if (!audioSource.isPlaying)
             audioSource.Play();
         WaitForSeconds delay = new WaitForSeconds(2.0f);
@@ -320,18 +340,21 @@ class MatchManager: Manager
         matchSetcamera.fieldOfView = 20.0f;
         if (isPlayerOneVictory)
         {
-
+            //audioSource.clip = playersTheme[0];
             StartCoroutine("VictoryTaunt", 0);
         }
         else if (!isPlayerOneVictory)
         {
-
+            //audioSource.clip = playersTheme[1];
             StartCoroutine("VictoryTaunt", 1);
         }
     }
     IEnumerator VictoryTaunt(int player)
     {
-
+        
+        
+        if (MainGameManager.Instance.PlayerVictories[player] < 1)
+            audioSource.clip = playersTheme[player];
         matchSetcamera.transform.LookAt(players[player].transform.position);
         players[player].transform.LookAt(matchSetcamera.transform.position);
         players[player].IsTaunting = true;
@@ -340,24 +363,45 @@ class MatchManager: Manager
         yield return delay;
         Debug.Log("Player1" + MainGameManager.Instance.PlayerVictories[0] + " Player2:" + MainGameManager.Instance.PlayerVictories[1]);
 
-    //if (rounds.playerVictories[player] >= 1)
-    //    StartCoroutine("MatchSetNavigation");
-    if (MainGameManager.Instance.PlayerVictories[player] >= 1)
-    {
+        //if (rounds.playerVictories[player] >= 1)
+        //    StartCoroutine("MatchSetNavigation");
+        if (MainGameManager.Instance.PlayerVictories[player] >= 1)
+        {
         
-        MatchSetNavigation();
-    }
-
-    else
-    {
-        MainGameManager.Instance.Rounds++;
-        MainGameManager.Instance.PlayerVictories[player]++;
-        // isMatchOver = false;
-        if (MainGameManager.Instance.ActivePlayers == 2)
-            SceneManager.LoadScene("Multiplayer");
+            MatchSetNavigation();
+        }
         else
-            SceneManager.LoadScene("SinglePlayer");
+        {
+            MainGameManager.Instance.Rounds++;
+            MainGameManager.Instance.PlayerVictories[player]++;
+            // isMatchOver = false;
+            if (MainGameManager.Instance.ActivePlayers == 2)
+                SceneManager.LoadScene("Multiplayer");
+            else
+                SceneManager.LoadScene("SinglePlayer");
+        }
+
     }
+    IEnumerator HypeTaunt(int player)
+    {
+        audioSource.clip = playersTheme[player];
+        audioSource.Play();
+        while (players[player].IsHyped)
+        {
+
+            
+            
+            WaitForSeconds delay = new WaitForSeconds(2.0f);
+            yield return delay;
+        }
+
+
+
+        //players[player].IsTaunting = true;
+
+        //if (rounds.playerVictories[player] >= 1)
+        //    StartCoroutine("MatchSetNavigation");
+        
 
     }
     protected  void InitializeButtons()
@@ -373,14 +417,14 @@ class MatchManager: Manager
         MatchSetMenuObject.SetActive(false);
 
         //Pause Menu
-        pauseMenuObject = GameObject.FindGameObjectWithTag("ShowOnPause");
+        //pauseMenuObject = GameObject.FindGameObjectWithTag("ShowOnPause");
         pauseButtons = new Button[2];
-        foreach (Button button in pauseMenuObject.GetComponentsInChildren<Button>())
+        foreach (Button button in pauseMenu.GetComponentsInChildren<Button>())
             if (button.name.ToLower() == string.Format("resume"))
                 pauseButtons[0] = button;
             else
                 pauseButtons[1] = button;
-        pauseMenuObject.SetActive(false);
+        pauseMenu.SetActive(false);
 
 
 
@@ -394,7 +438,7 @@ class MatchManager: Manager
     {
 
         MatchSetMenuObject.SetActive(true);
-        nav.active = true;
+        nav.SetActive(true);
         if (!matchDefaultPosition)
         {
             nav.transform.position = (matchSetButtons[0].transform.position - new Vector3(100, 15.0f, 0));
@@ -437,7 +481,7 @@ class MatchManager: Manager
         }
         else
         {
-            while (pauseMenuObject.activeSelf)
+            while (pauseMenu.activeSelf)
             {
                 float pauseEndTime = Time.realtimeSinceStartup + 1f;
                 while (Time.realtimeSinceStartup < pauseEndTime)
@@ -501,7 +545,8 @@ class MatchManager: Manager
 
             if (nav.transform.position == quitButton)
             {
-                nav.active = false;
+                MainGameManager.Instance.ClearRounds();
+                nav.SetActive(false);
                 SceneManager.LoadScene("Main Menu");
 
                 Time.timeScale = 1.0f;
@@ -513,7 +558,7 @@ class MatchManager: Manager
                 {
                     //rounds.ClearRounds();
                     MainGameManager.Instance.ClearRounds();
-                    nav.active = false;
+                    nav.SetActive(false);
                     if (MainGameManager.Instance.ActivePlayers == 2)
                         SceneManager.LoadScene("Multiplayer");
                     else
@@ -522,8 +567,8 @@ class MatchManager: Manager
 
                 Time.timeScale = 1.0f;
                 isPaused = false;
-                pauseMenuObject.SetActive(false);
-                nav.active = false;
+                pauseMenu.SetActive(false);
+                nav.SetActive(false);
 
             }
         }
@@ -543,8 +588,8 @@ class MatchManager: Manager
                 Time.timeScale = 0.0f;
                 isPaused = true;
                 audioSource.Pause();
-                pauseMenuObject.SetActive(true);
-                nav.active = true;
+                pauseMenu.SetActive(true);
+                nav.SetActive(true);
                 StartCoroutine("PauseNavigation");
             }
 

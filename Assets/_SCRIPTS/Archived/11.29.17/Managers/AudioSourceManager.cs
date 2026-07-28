@@ -18,7 +18,7 @@ public class AudioSourceManager : Manager
     [SerializeField]
     public AudioClip playerTwoTheme;
     private AudioClip[] playersHypeTheme;
-    [SerializeField]
+    
 
 
 
@@ -28,7 +28,7 @@ public class AudioSourceManager : Manager
     }
     private void Update()
     {
-        StageTheme();
+        //StageTheme();
         PlayHypeMusic();
         GetHypeMusic();
         MatchSet();

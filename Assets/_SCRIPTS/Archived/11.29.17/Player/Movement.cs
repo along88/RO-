@@ -13,23 +13,25 @@ public class Movement : MonoBehaviour {
     [SerializeField]
     private float jumpDelay;
     private WaitForSeconds resetJump = new WaitForSeconds(0.0f);
+    private GamePhysics gamePhysics;
 
     // Use this for initialization
     void Awake ()
     {
         player = GetComponent<Player>();
+        gamePhysics = GetComponent<GamePhysics>();
         inputManager = GetComponent<InputManager>();
     }
     // Update is called once per frame
     void Update ()
     {
        // Move();
-        //Dash();
+        Dash();
         Jump();
     }
     private void Move()
     {
-        if (player.IsGrounded && !player.IsDashing && !player.IsAttacking && player.CanMove && Time.timeScale != 0.0f)
+        if (player.IsGrounded && !player.IsAttacking && player.CanMove && Time.timeScale != 0.0f)
         {
             if (inputManager.Movement(player.ID) != Vector3.zero)
                 player.IsWalking = true;
@@ -59,16 +61,15 @@ public class Movement : MonoBehaviour {
         else
             return false;
     }
+    
     private void Dash()
     {
-        if (player.IsGrounded && !player.IsKnockedBack && player.CanDash && !player.IsDefending && !player.IsTaunting && !player.IsAttacking && !player.IsWalking && Time.timeScale != 0.0f)
+        if (inputManager.DashButton(player.ID))
         {
-            if (inputManager.DashButton(player.ID) && player.AttackCounter == 0)
-            {
-                player.IsDashing = true;
-            }
+            gamePhysics.TryDash();
         }
     }
+    
     private IEnumerator JumpReset()
     {
         yield return resetJump;

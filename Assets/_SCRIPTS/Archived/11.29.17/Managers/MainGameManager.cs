@@ -24,10 +24,10 @@ public class MainGameManager : MonoBehaviour
         
     }
 
-    public MainGameManager()
-    {
-       // Object.DontDestroyOnLoad(this);
-    }
+    //public MainGameManager()
+    //{
+    //   // Object.DontDestroyOnLoad(this);
+    //}
     private static int activePlayers;
     private static int round;
     private static int[] playerVictories = new int[2];
@@ -60,7 +60,10 @@ public class MainGameManager : MonoBehaviour
         get { return playerColorPriority; }
         set { playerColorPriority = value; }
     }
-
+    private void Awake()
+    {
+        activePlayers = 2;
+    }
     void Start()
     {
         round++;

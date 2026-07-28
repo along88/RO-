@@ -32,11 +32,30 @@ public class GamePhysics : MonoBehaviour
     protected float defaultSpeed;
     [SerializeField]
     protected float dashSpeed = 0.0f;
-    
+    [SerializeField]
+    private float dashDistance = 15f;
+    [SerializeField]
+    private string dashAnimationTag = "Dash";
+    private Coroutine dashCoroutine;
+    private Animator animator;
+    [SerializeField]
+    private float dashAnimationTimeout = 0.5f;
+    [SerializeField]
+    private float dashMoveDuration = 0.15f;
+    private void Awake()
+    {
+        
+        
+    }
 
     private void Start()
     {
         defaultSpeed = speed;
+        rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        player = GetComponent<Player>();
+        inputManager = GetComponent<InputManager>();
+
     }
     private void LateUpdate()
     {
@@ -45,7 +64,7 @@ public class GamePhysics : MonoBehaviour
         AttackMovementRestriction();
         Hit();
         KnockedBack();
-        Dash();
+        //Dash();
         UpdatePositon();
         UpdateRotation();
         RingOut();
@@ -80,15 +99,38 @@ public class GamePhysics : MonoBehaviour
             //rb.rotation = Quaternion.LookRotation(inputManager.Movement(player.ID));
 
     }
-    private void Dash()
+    //private void Dash()
+    //{
+    //    TryDash();
+
+
+
+    //}
+    public bool TryDash()
     {
-        if (player.IsDashing && player.CanDash)
+        // A dash coroutine is already running.
+        if (dashCoroutine != null)
         {
-           
-            StartCoroutine("Dashing");
+            return false;
         }
-           
-        
+
+        // Centralized dash eligibility check.
+        if (!player.CanDash ||
+            player.IsDashing ||
+            !player.IsGrounded ||
+            player.IsKnockedBack ||
+            player.IsDefending ||
+            player.IsTaunting ||
+            player.IsAttacking ||
+            player.IsExhausted ||
+            player.AttackCounter != 0 ||
+            Time.timeScale == 0.0f)
+        {
+            return false;
+        }
+
+        dashCoroutine = StartCoroutine(Dashing());
+        return true;
     }
     private void Jump()
     {
@@ -158,19 +200,88 @@ public class GamePhysics : MonoBehaviour
     }
     private IEnumerator Dashing()
     {
+        player.IsDashing = true;
+        player.IsWalking = false;
+        player.CanMove = false;
 
-        //float knockBackForce = 10.0f;
-        //player.transform.forward = -player.Opponent.HitDirection;
-        //rb.position += player.Opponent.HitDirection * knockBackForce * Time.deltaTime;
-        
-        float dashSpeed_ = dashSpeed;
-        rb.position += (player.transform.forward * dashSpeed) * Time.deltaTime;
-        dashDelay = new WaitForSeconds(dashDelayLength);
-        yield return dashDelay;
+        Vector3 startPosition = rb.position;
+        Vector3 dashDirection = transform.forward.normalized;
+        Vector3 targetPosition =
+            startPosition + dashDirection * dashDistance;
+
+        // AnimationManager sees IsDashing and plays "Dash".
+        float timeout = dashAnimationTimeout;
+
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Dash"))
+        {
+            timeout -= Time.deltaTime;
+
+            if (timeout <= 0.0f)
+            {
+                Debug.LogWarning(
+                    gameObject.name +
+                    " did not enter the Dash animation state."
+                );
+
+                FinishDash();
+                yield break;
+            }
+
+            yield return null;
+        }
+
+        // Move the fixed dash distance over dashMoveDuration.
+        float elapsedTime = 0.0f;
+
+        while (elapsedTime < dashMoveDuration)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+
+            float dashProgress = Mathf.Clamp01(
+                elapsedTime / dashMoveDuration
+            );
+
+            Vector3 nextPosition = Vector3.Lerp(
+                startPosition,
+                targetPosition,
+                dashProgress
+            );
+
+            rb.MovePosition(nextPosition);
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        // Ensure the full distance is reached.
+        rb.MovePosition(targetPosition);
+
+        /*
+         * Movement has finished, but keep IsDashing true until
+         * the animation finishes. This prevents another dash
+         * during the remaining animation frames.
+         */
+        while (true)
+        {
+            AnimatorStateInfo dashState =
+                animator.GetCurrentAnimatorStateInfo(0);
+
+            if (!dashState.IsName("Dash") ||
+                dashState.normalizedTime >= 1.0f)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        FinishDash();
+    }
+    private void FinishDash()
+    {
         player.IsDashing = false;
-        player.CanDash = true;
-        //player.CanMove = true;
-        //  player.transform.eulerAngles = defaultPosition;
+        player.CanMove = true;
+
+        dashCoroutine = null;
     }
     private bool CanMove()
     {

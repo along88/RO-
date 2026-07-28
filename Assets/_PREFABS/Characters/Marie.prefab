@@ -5200,6 +5200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockGauge: 0
+  gaugeRechargeRate: 25
 --- !u!114 &114532869229744250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5236,6 +5237,10 @@ MonoBehaviour:
   lastAttack: 0
   moveDelay: 1.5
   dashSpeed: 30
+  dashDistance: 15
+  dashAnimationTag: Dash
+  dashAnimationTimeout: 0.5
+  dashMoveDuration: 0.2
   lungeDistance: 100
 --- !u!222 &222754694353443440
 CanvasRenderer:
@@ -9421,6 +9426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8502fb063cd77354bbbe40792562cf5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  facing: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1001 &3348116955970936870
 PrefabInstance:
   m_ObjectHideFlags: 0

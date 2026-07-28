@@ -19,6 +19,7 @@ public class AnimationManager : MonoBehaviour
     private WaitForSeconds hypeDelay;
     [SerializeField]
     private float attackDelayMultiplier;
+    private bool wasDashing;
     public bool canAttack
     {
         get
@@ -289,12 +290,13 @@ public class AnimationManager : MonoBehaviour
         }
     private void Dash()
     {
-        if (inputManager.DashButton(player.ID) && !player.IsKnockedBack && !player.IsExhausted && !player.IsHypeAttack && player.CanDash && !player.IsTaunting && player.AttackCounter == 0)
+        // Play once when IsDashing changes from false to true.
+        if (player.IsDashing && !wasDashing)
         {
-            player.IsDashing = true;
-            anim.Play("Dash");
+            anim.Play("Dash", 0, 0.0f);
         }
-       
+
+        wasDashing = player.IsDashing;
     }
     private bool CanAttack()
     {
@@ -351,12 +353,12 @@ public class AnimationManager : MonoBehaviour
     }
     private IEnumerator ResetTaunt()
     {
-        player.Opponent.gameObject.active = false;
+        player.Opponent.gameObject.SetActive(false);
         anim.Play("HypeTaunt");
         WaitForSeconds delay = new WaitForSeconds(2.0f);
         yield return delay;
         player.IsTaunting = false;
-        player.Opponent.gameObject.active = true;
+        player.Opponent.gameObject.SetActive(true);
         
     }
     private IEnumerator ResetHypeHit()

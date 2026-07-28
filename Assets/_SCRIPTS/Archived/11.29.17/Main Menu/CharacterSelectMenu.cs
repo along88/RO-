@@ -161,7 +161,7 @@ public class CharacterSelectMenu : MonoBehaviour
                 navIcons[1].transform.position = navIcons[2].transform.position;
                 navIcons[2].SetActive(false);
                 navIcons[1].SetActive(true);
-            MainGameManager.Instance.ActivePlayers = 2;
+                MainGameManager.Instance.ActivePlayers = 2;
                 p2Panel.color = Color.green;
 
 
