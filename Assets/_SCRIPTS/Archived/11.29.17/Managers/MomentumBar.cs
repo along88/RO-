@@ -10,12 +10,12 @@ public class MomentumBar : MonoBehaviour
     [SerializeField]
     private bool isHyped; 
     private DamageType damage;
-    private AudioManager[] playerAudioManager;
-    private AudioSource playersTheme;
-    [SerializeField]
-    private AudioClip themeOne;
-    [SerializeField]
-    private AudioClip themeTwo;
+    //private AudioManager[] playerAudioManager;
+    //private AudioSource playersTheme;
+    //[SerializeField]
+    //private AudioClip themeOne;
+    //[SerializeField]
+    //private AudioClip themeTwo;
     [SerializeField]
     private float startingValue;
     [SerializeField]
@@ -45,8 +45,8 @@ public class MomentumBar : MonoBehaviour
         startingValue = 50.0f;
         momentumBar.value = startingValue;
 
-        playersTheme = GetComponent<AudioSource>();
-        playerAudioManager = new AudioManager[2];
+        //playersTheme = GetComponent<AudioSource>();
+        //playerAudioManager = new AudioManager[2];
         //foreach (var theme in GameObject.FindGameObjectsWithTag("Player"))
         //{
         //    if (theme.GetComponent<Player>().ID == 1)
@@ -66,14 +66,14 @@ public class MomentumBar : MonoBehaviour
             {
                 players[0] = player.GetComponent<Player>();
                 playersName[0].sprite = players[0].GetComponent<Image>().sprite;
-                playerAudioManager[0] = player.GetComponent<AudioManager>();
+                //playerAudioManager[0] = player.GetComponent<AudioManager>();
             }
 
             else
             {
                 players[1] = player.GetComponent<Player>();
                 playersName[1].sprite = players[1].GetComponent<Image>().sprite;
-                playerAudioManager[1] = player.GetComponent<AudioManager>();
+                //playerAudioManager[1] = player.GetComponent<AudioManager>();
             }
 
         }
@@ -179,14 +179,14 @@ public class MomentumBar : MonoBehaviour
             {
                 isTimer = true;
                 momentumBar.value = Mathf.MoveTowards(momentumBar.value, startingValue, Time.deltaTime * hypeTimer);
-                playerAudioManager[0].FadeHypeMusic((momentumBar.value - startingValue) / 50);
+                //playerAudioManager[0].FadeHypeMusic((momentumBar.value - startingValue) / 50);
                 
             }
             else if (players[1].IsHyped && !players[1].IsTaunting)
             {
                 isTimer = true;
                 momentumBar.value = Mathf.MoveTowards(momentumBar.value, startingValue, Time.deltaTime * hypeTimer);
-                playerAudioManager[1].FadeHypeMusic((momentumBar.value + startingValue) / 50);
+                //playerAudioManager[1].FadeHypeMusic((momentumBar.value + startingValue) / 50);
             }
         }
         else

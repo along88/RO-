@@ -22,17 +22,9 @@ public class Manager:MonoBehaviour
     protected Vector3 resumeButton;
     protected Vector3 quitButton;
 
-    protected bool isPlayerOneVictory;
+    
     protected bool isPaused;
-    protected bool isMatchOver;
-
-
-    [SerializeField]
-    protected AudioSource menuSFX;
-    [SerializeField]
-    protected AudioClip navChime;
-    [SerializeField]
-    protected AudioClip navConfirm;
+    
     protected AudioSource audioSource;
 
     private void Start()

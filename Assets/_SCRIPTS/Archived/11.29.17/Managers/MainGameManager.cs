@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public enum Fighters
 {
@@ -11,62 +8,80 @@ public enum Fighters
 
 public class MainGameManager : MonoBehaviour
 {
-    private static MainGameManager instance;
+    public static MainGameManager Instance { get; private set; }
 
-    public static MainGameManager Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = new MainGameManager();
-            return instance;
-        }
-        
-    }
+    [SerializeField]
+    private int activePlayers = 2;
 
-    //public MainGameManager()
-    //{
-    //   // Object.DontDestroyOnLoad(this);
-    //}
-    private static int activePlayers;
-    private static int round;
-    private static int[] playerVictories = new int[2];
-    private static Fighters[] fighters = new Fighters[2];
-    public static bool[] playerColorPriority = new bool[2];
+    private int round;
+    private int[] playerVictories = new int[2];
 
+    [SerializeField]
+    private Fighters[] fighters = new Fighters[2];
+
+    [SerializeField]
+    private bool[] playerColorPriority = new bool[2];
+
+    // Current individual round.
+    public bool IsMatchOver { get; set; }
+    public bool IsPlayerOneVictory { get; set; }
+
+    // Entire best-of-three set.
+    public bool IsMatchSetOver { get; set; }
+    public int WinningPlayerId { get; set; }
 
     public int ActivePlayers
     {
-        get { return activePlayers; }
-        set { activePlayers = value; }
+        get => activePlayers;
+        set => activePlayers = value;
     }
+
     public int Rounds
     {
-        get { return round; }
-        set { round = value; }
+        get => round;
+        set => round = value;
     }
+
     public Fighters[] Fighters
     {
-        get { return fighters; }
-        set { fighters = value; }
+        get => fighters;
+        set => fighters = value;
     }
+
     public int[] PlayerVictories
     {
-        get { return playerVictories; }
-        set { playerVictories = value; }
+        get => playerVictories;
+        set => playerVictories = value;
     }
+
     public bool[] PlayerColorPriority
     {
-        get { return playerColorPriority; }
-        set { playerColorPriority = value; }
+        get => playerColorPriority;
+        set => playerColorPriority = value;
     }
+
+    //public static MainGameManager Instance { get; private set; }
+
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         activePlayers = 2;
     }
-    void Start()
+
+    public void BeginRound()
     {
         round++;
+
+        IsMatchOver = false;
+        IsPlayerOneVictory = false;
     }
 
     public void ClearRounds()
@@ -74,9 +89,10 @@ public class MainGameManager : MonoBehaviour
         round = 0;
         playerVictories = new int[2];
 
+        IsMatchOver = false;
+        IsPlayerOneVictory = false;
+
+        IsMatchSetOver = false;
+        WinningPlayerId = 0;
     }
-
-
-
 }
-

@@ -138,7 +138,7 @@ InputManager:
     descriptiveName: Triggers submit or accept option
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: enter
+    positiveButton: return
     altNegativeButton: joystick 2 button 9
     altPositiveButton: joystick 1 button 9
     gravity: 1000

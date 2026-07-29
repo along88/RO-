@@ -12,46 +12,32 @@ class MatchManager: Manager
 {
     [SerializeField]
     private Sprite[] PlayerIcon;
-    public Button[] matchSetButtons;
+    
     private Vector3 cameraPosition;
-    //private AudioSourceManager asm;
-
-
     private Camera matchSetcamera;
     private Camera mainCamera;
     private Image uiTime;
     private GameObject MatchSetMenuObject;
-    //private GameObject pauseMenuObject;
-
     [SerializeField]
     private float matchTimer;
     [SerializeField]
     private Text matchTimerText;
-    //[SerializeField]
-    //private Rounds rounds;
     [SerializeField]
     private float match;
-    
     [SerializeField]
     private Text ringOutText;
     private AudioClip[] playersTheme;
-    
     GameObject pauseMenu;
-
     [SerializeField]
     Image ringOut;
     [SerializeField]
     private GameObject playerBounds;
-
-    //private AudioSourceManager asm;
-
-
     [SerializeField]
     private GameObject[] prefabs;
 
     public GameObject[] FighterModel;
     public float Match { get { return match; } set { match = value; } }
-    private bool matchDefaultPosition;
+
 
     private void SelectFighter(Fighters[] fighters)
     {
@@ -119,18 +105,16 @@ class MatchManager: Manager
         InitializeButtons();
 
         var foundPlayers = new List<Player>();
-        // InitializeButtons();
+
         foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
             foundPlayers.Add(player.GetComponent<Player>());
 
         players = foundPlayers.ToArray();
         MainGameManager.Instance.ActivePlayers = players.Count();
-        
-        //pauseMenu = new Manager();
-
-}
+    }
     private void Start()
     {
+        MainGameManager.Instance.BeginRound();
         GetPlayers();
             
         GetCameras();
@@ -146,37 +130,35 @@ class MatchManager: Manager
             if (player.GetComponent<Player>().ID == 1)
             {
                 players[0] = player.GetComponent<Player>();
-                //asm.playerOneTheme = player.GetComponent<AudioManager>().hypeMusic;
+
                 playersTheme[0] = player.GetComponent<AudioManager>().hypeMusic;
             }
             else
             {
                 players[1] = player.GetComponent<Player>();
-                //asm.playerTwoTheme = player.GetComponent<AudioManager>().hypeMusic;
+
                 playersTheme[1] = player.GetComponent<AudioManager>().hypeMusic;
             }
 
-            //rounds = 0;
 
         }
     }
     private void Update()
     {
         RoundTimer();
-        PauseMenu();
-        RingOutVictory();
-        if (players[0].IsHyped)
-        {
-            StartCoroutine("HypeTaunt",0); 
-        }
-        //AudioSourceManager audio = new AudioSourceManager();
 
+        RingOutVictory();
+        foreach (var player in players)
+        {
+            if (player.IsHyped) {
+                StartCoroutine("HypeTaunt", 0);
+                break;
+            }
+        }
     }
         
     private void InitializeComponents()
     {
-        //stageTheme = GetComponent<AudioSource>().clip;
-        //asm = GetComponent<AudioManager>();
         pauseMenu = GameObject.FindGameObjectWithTag("ShowOnPause");
         MatchSetMenuObject = GameObject.FindGameObjectWithTag("MatchMenu");
         nav = GameObject.FindGameObjectWithTag("Nav");
@@ -185,15 +167,11 @@ class MatchManager: Manager
         pauseMenu.SetActive(false);
         ringOut.enabled = false;
         audioSource = GetComponent<AudioSource>();
-        menuSFX = GetComponent<AudioSource>();
+
         uiTime = GameObject.Find("Time").GetComponent<Image>();
         uiTime.enabled = false;
         matchTimerText = GetComponentInChildren<Text>();
         playersTheme = new AudioClip[2];
-
-
-
-
     }
 
     private void AssignOpponent()
@@ -210,11 +188,11 @@ class MatchManager: Manager
         
     private void RoundTimer()
     {
-        if (!isMatchOver)
+        if (!MainGameManager.Instance.IsMatchOver)
             matchTimer -= Time.deltaTime;
         if (matchTimer <= 0)
         {
-            //matchTimer = 0;
+
             UpdateTimer();
             DetermineMomentumWinner();
         }
@@ -233,32 +211,28 @@ class MatchManager: Manager
     private void DetermineMomentumWinner()
     {
 
-        if (!isMatchOver)
+        if (!MainGameManager.Instance.IsMatchOver)
         {
             var slider = gameObject.GetComponentInChildren<Slider>();
             if (slider.value > 50.0f)
             {
-                //uiText.text = "Player 1 wins!";
+
                 uiTime.enabled = true;
-                isPlayerOneVictory = true;
-                isMatchOver = true;
-
-
-                // playersTheme[0].StopHypeMusic();
-
+                MainGameManager.Instance.IsPlayerOneVictory = true;
+                MainGameManager.Instance.IsMatchOver = true;
             }
             else if (slider.value < 50.0f)
             {
-                //uiText.text = "Player 2 wins!";
+
                 uiTime.enabled = true;
-                isPlayerOneVictory = false;
-                isMatchOver = true;
-                // playersTheme[1].StopHypeMusic();
+                MainGameManager.Instance.IsPlayerOneVictory = false;
+                MainGameManager.Instance.IsMatchOver = true;
+
             }
             else
             {
                 uiTime.enabled = true;
-                isMatchOver = true;
+                MainGameManager.Instance.IsMatchOver = true;
 
             }
 
@@ -281,22 +255,22 @@ class MatchManager: Manager
     }
     private void RingOutVictory()
     {
-        if (!isMatchOver)
+        if (!MainGameManager.Instance.IsMatchOver)
         {
             if (players[0].IsHypeHit)
             {
                 ringOut.enabled = true;
 
-                isPlayerOneVictory = false;
-                isMatchOver = true;
+                MainGameManager.Instance.IsPlayerOneVictory = false;
+                MainGameManager.Instance.IsMatchOver = true;
             }
             else if (players[1].IsHypeHit)
             {
 
                 ringOut.enabled = true;
 
-                isPlayerOneVictory = true;
-                isMatchOver = true;
+                MainGameManager.Instance.IsPlayerOneVictory = true;
+                MainGameManager.Instance.IsMatchOver = true;
 
             }
             if (players[0].transform.position.y < playerBounds.transform.position.y)
@@ -304,18 +278,15 @@ class MatchManager: Manager
 
                 ringOut.enabled = true;
 
-                isPlayerOneVictory = false;
-                isMatchOver = true;
+                MainGameManager.Instance.IsPlayerOneVictory = false;
+                MainGameManager.Instance.IsMatchOver = true;
 
             }
             else if (players[1].transform.position.y < playerBounds.transform.position.y)
             {
                 ringOut.enabled = true;
-                isPlayerOneVictory = true;
-                isMatchOver = true;
-
-
-
+                MainGameManager.Instance.IsPlayerOneVictory = true;
+                MainGameManager.Instance.IsMatchOver = true;
             }
 
         }
@@ -328,9 +299,6 @@ class MatchManager: Manager
     private IEnumerator MatchSetDelay()
     {
         Debug.Log("Match");
-        
-        if (!audioSource.isPlaying)
-            audioSource.Play();
         WaitForSeconds delay = new WaitForSeconds(2.0f);
         yield return delay;
         ringOut.enabled = false;
@@ -338,14 +306,14 @@ class MatchManager: Manager
         matchSetcamera.enabled = true;
         matchSetcamera.transform.position = cameraPosition;
         matchSetcamera.fieldOfView = 20.0f;
-        if (isPlayerOneVictory)
+        if (MainGameManager.Instance.IsPlayerOneVictory)
         {
-            //audioSource.clip = playersTheme[0];
+
             StartCoroutine("VictoryTaunt", 0);
         }
-        else if (!isPlayerOneVictory)
+        else if (!MainGameManager.Instance.IsPlayerOneVictory)
         {
-            //audioSource.clip = playersTheme[1];
+
             StartCoroutine("VictoryTaunt", 1);
         }
     }
@@ -353,8 +321,6 @@ class MatchManager: Manager
     {
         
         
-        if (MainGameManager.Instance.PlayerVictories[player] < 1)
-            audioSource.clip = playersTheme[player];
         matchSetcamera.transform.LookAt(players[player].transform.position);
         players[player].transform.LookAt(matchSetcamera.transform.position);
         players[player].IsTaunting = true;
@@ -363,18 +329,24 @@ class MatchManager: Manager
         yield return delay;
         Debug.Log("Player1" + MainGameManager.Instance.PlayerVictories[0] + " Player2:" + MainGameManager.Instance.PlayerVictories[1]);
 
-        //if (rounds.playerVictories[player] >= 1)
-        //    StartCoroutine("MatchSetNavigation");
         if (MainGameManager.Instance.PlayerVictories[player] >= 1)
         {
-        
+            // This player already had one win, so this is their second.
+            MainGameManager.Instance.IsMatchOver = true;
+            MainGameManager.Instance.IsPlayerOneVictory = player == 0;
+
+            Debug.Log(
+                $"Full match over. Winner: Player {player + 1}"
+            );
+
             MatchSetNavigation();
         }
         else
         {
-            MainGameManager.Instance.Rounds++;
+            // First round win.
             MainGameManager.Instance.PlayerVictories[player]++;
-            // isMatchOver = false;
+            MainGameManager.Instance.Rounds++;
+
             if (MainGameManager.Instance.ActivePlayers == 2)
                 SceneManager.LoadScene("Multiplayer");
             else
@@ -384,227 +356,64 @@ class MatchManager: Manager
     }
     IEnumerator HypeTaunt(int player)
     {
-        audioSource.clip = playersTheme[player];
-        audioSource.Play();
+        
         while (players[player].IsHyped)
         {
-
-            
-            
             WaitForSeconds delay = new WaitForSeconds(2.0f);
             yield return delay;
         }
 
 
-
-        //players[player].IsTaunting = true;
-
-        //if (rounds.playerVictories[player] >= 1)
-        //    StartCoroutine("MatchSetNavigation");
-        
-
     }
     protected  void InitializeButtons()
     {
-        //Match Set Menu - make this it's own class that inherits from Menu
-        
-        matchSetButtons = new Button[2];
-        foreach (Button button in MatchSetMenuObject.GetComponentsInChildren<Button>())
-            if (button.name.ToLower() == string.Format("rematch"))
-                matchSetButtons[0] = button;
-            else
-                matchSetButtons[1] = button;
         MatchSetMenuObject.SetActive(false);
-
-        //Pause Menu
-        //pauseMenuObject = GameObject.FindGameObjectWithTag("ShowOnPause");
-        pauseButtons = new Button[2];
-        foreach (Button button in pauseMenu.GetComponentsInChildren<Button>())
-            if (button.name.ToLower() == string.Format("resume"))
-                pauseButtons[0] = button;
-            else
-                pauseButtons[1] = button;
         pauseMenu.SetActive(false);
-
-
-
-
-        //Navigation Object
         
-        nav.transform.position = (pauseButtons[0].transform.position - new Vector3(130, 0, 0));
-        nav.SetActive(false);
     }
     public void MatchSetNavigation()
     {
-
         MatchSetMenuObject.SetActive(true);
         nav.SetActive(true);
-        if (!matchDefaultPosition)
-        {
-            nav.transform.position = (matchSetButtons[0].transform.position - new Vector3(100, 15.0f, 0));
-            matchDefaultPosition = true;
-        }
 
-        var text = MatchSetMenuObject.GetComponentInChildren<Text>();
-        if (isPlayerOneVictory)
+        Text text =
+            MatchSetMenuObject.GetComponentInChildren<Text>();
+
+        if (MainGameManager.Instance.IsPlayerOneVictory)
         {
             players[1].gameObject.SetActive(false);
-            text.text = string.Format(players[0].name + " Wins!");
+            text.text = players[0].name + " Wins!";
         }
         else
         {
             players[0].gameObject.SetActive(false);
-            text.text = string.Format(players[1].name + " Wins!");
+            text.text = players[1].name + " Wins!";
         }
-
 
         Time.timeScale = 0.01f;
-        StartCoroutine("PauseNavigation");
-
     }
-    IEnumerator PauseNavigation()
+
+    public void Rematch()
     {
-        if (isMatchOver)
-        {
-            while (MatchSetMenuObject.activeSelf)
-            {
-                float pauseEndTime = Time.realtimeSinceStartup + 1f;
-                while (Time.realtimeSinceStartup < pauseEndTime)
-                {
+        Time.timeScale = 1f;
+        MainGameManager.Instance.ClearRounds();
 
-                    yield return 0;
-                    PauseControls();
-
-                }
-
-            }
-        }
+        if (MainGameManager.Instance.ActivePlayers == 2)
+            SceneManager.LoadScene("Multiplayer");
         else
-        {
-            while (pauseMenu.activeSelf)
-            {
-                float pauseEndTime = Time.realtimeSinceStartup + 1f;
-                while (Time.realtimeSinceStartup < pauseEndTime)
-                {
-
-                    yield return 0;
-                    PauseControls();
-
-                }
-
-            }
-        }
+            SceneManager.LoadScene("SinglePlayer");
     }
-    private void PauseControls()
+    public void ReturnToMainMenu()
     {
-
-
-        if (isMatchOver)
-        {
-
-            Debug.Log(matchSetButtons[0].name);
-            resumeButton = (matchSetButtons[0].transform.position - new Vector3(130, 10.0f, 0));
-            quitButton = (matchSetButtons[1].transform.position - new Vector3(150, 1, 0));
-
-            //nav.transform.parent = MatchSetMenuObject.transform;
-        }
-        else
-        {
-            resumeButton = (pauseButtons[0].transform.position - new Vector3(110, 0, 0));
-            quitButton = (pauseButtons[1].transform.position - new Vector3(110, 0, 0));
-        }
-
-        if (Navigation() > 0.0f)
-        {
-            menuSFX.clip = navChime;
-            if (nav.transform.position != resumeButton)
-            {
-                nav.transform.position = resumeButton;
-                Debug.Log("Nav Moved!");
-                menuSFX.Play();
-            }
-
-        }
-        else if (Navigation() < 0.0f)
-        {
-            menuSFX.clip = navChime;
-            if (nav.transform.position != quitButton)
-            {
-                nav.transform.position = quitButton;
-                menuSFX.Play();
-            }
-
-        }
-        else if (ConfirmButton())
-        {
-
-            menuSFX.clip = navConfirm;
-            if (isPaused)
-                menuSFX.Play();
-
-
-            if (nav.transform.position == quitButton)
-            {
-                MainGameManager.Instance.ClearRounds();
-                nav.SetActive(false);
-                SceneManager.LoadScene("Main Menu");
-
-                Time.timeScale = 1.0f;
-
-            }
-            else
-            {
-                if (isMatchOver)
-                {
-                    //rounds.ClearRounds();
-                    MainGameManager.Instance.ClearRounds();
-                    nav.SetActive(false);
-                    if (MainGameManager.Instance.ActivePlayers == 2)
-                        SceneManager.LoadScene("Multiplayer");
-                    else
-                        SceneManager.LoadScene("SinglePlayer");
-                }
-
-                Time.timeScale = 1.0f;
-                isPaused = false;
-                pauseMenu.SetActive(false);
-                nav.SetActive(false);
-
-            }
-        }
-
+        Time.timeScale = 1f;
+        MainGameManager.Instance.ClearRounds();
+        SceneManager.LoadScene("Main Menu");
     }
-    private bool PauseButton()
+    public void ResumeMatch()
     {
-        return Input.GetButtonDown("Submit");
+        Time.timeScale = 1f;
+        isPaused = false;
+        pauseMenu.SetActive(false);
     }
-    public void PauseMenu()
-    {
-        if (PauseButton() && !isMatchOver)
-        {
-            if (!isPaused)
-            {
-
-                Time.timeScale = 0.0f;
-                isPaused = true;
-                audioSource.Pause();
-                pauseMenu.SetActive(true);
-                nav.SetActive(true);
-                StartCoroutine("PauseNavigation");
-            }
-
-
-        }
-    }
-    private float Navigation()
-    {
-        return Input.GetAxis("NavV2");
-    }
-
 
 }
-
-    
-
-
-

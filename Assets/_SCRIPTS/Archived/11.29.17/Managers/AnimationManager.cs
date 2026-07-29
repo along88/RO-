@@ -90,7 +90,7 @@ public class AnimationManager : MonoBehaviour
     {
         //anim.SetBool("isBlocking", player.IsDefending);
         if (player.IsGrounded)
-        { 
+        {
             if (player.CanBlock && inputManager.DefendButton(player.ID) && (Time.time - player.LastSuccessfulAttack) > 1.0f && !player.IsTaunting && !player.IsExhausted && !player.IsKnockedBack && !player.IsDashing)
             {
                 anim.Play("Block");
@@ -101,6 +101,8 @@ public class AnimationManager : MonoBehaviour
                 player.IsDefending = false;
             }
         }
+        else
+            player.IsDefending = false;
         
     }
     private void Attack()

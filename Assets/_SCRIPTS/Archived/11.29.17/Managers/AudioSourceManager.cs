@@ -9,125 +9,193 @@ using UnityEngine.UI;
 
 public class AudioSourceManager : Manager
 {
-    private float hypeMusicLastTime;
-    private float BGMLastTime;
+    [Header("Audio Sources")]
+    [SerializeField]
+    private AudioSource musicSource;
+
+    [Header("Music")]
     [SerializeField]
     private AudioClip stageTheme;
+
     [SerializeField]
     public AudioClip playerOneTheme;
+
     [SerializeField]
     public AudioClip playerTwoTheme;
-    private AudioClip[] playersHypeTheme;
-    
 
+    private float BGMLastTime;
+    private bool matchThemeStarted;
 
+    private bool playerOneWasHyped;
+    private bool playerTwoWasHyped;
+    //private bool matchThemeStarted;
 
     private void Awake()
     {
-        stageTheme = GetComponent<AudioSource>().clip;
+        if (musicSource == null)
+            musicSource = GetComponent<AudioSource>();
     }
+
+    private void Start()
+    {
+        if (stageTheme == null)
+            stageTheme = musicSource.clip;
+
+        GetHypeMusic();
+    }
+
     private void Update()
     {
-        //StageTheme();
+        if (MainGameManager.Instance == null)
+            return;
+
+        if (MainGameManager.Instance.IsMatchSetOver)
+        {
+            MatchSet();
+            return;
+        }
+
         PlayHypeMusic();
-        GetHypeMusic();
-        MatchSet();
+        StageTheme();
+    }
+
+    private void MatchSet()
+    {
+        if (matchThemeStarted)
+            return;
+
+        AudioClip victoryTheme;
+
+        if (MainGameManager.Instance.WinningPlayerId == 1)
+        {
+            victoryTheme = playerOneTheme;
+        }
+        else if (MainGameManager.Instance.WinningPlayerId == 2)
+        {
+            victoryTheme = playerTwoTheme;
+        }
+        else
+        {
+            Debug.LogError(
+                $"Invalid winning player ID: " +
+                $"{MainGameManager.Instance.WinningPlayerId}",
+                this
+            );
+
+            return;
+        }
+
+        Debug.Log($"Playing set victory theme: {victoryTheme.name}");
+
+        SetPlayerTheme(victoryTheme, true);
+        matchThemeStarted = true;
+    }
+
+    private void SetPlayerTheme(
+    AudioClip newClip,
+    bool restart = false
+)
+    {
+        if (newClip == null)
+        {
+            Debug.LogWarning("Player theme is null.", this);
+            return;
+        }
+
+        if (musicSource == null)
+        {
+            Debug.LogError("Music source is null.", this);
+            return;
+        }
+
+        bool clipChanged = musicSource.clip != newClip;
+
+        if (clipChanged || restart)
+        {
+            musicSource.Stop();
+            musicSource.clip = newClip;
+            musicSource.time = 0f;
+        }
+
+        musicSource.volume = 1f;
+        musicSource.loop = true;
+
+        if (!musicSource.isPlaying)
+            musicSource.Play();
     }
 
     private void PlayHypeMusic()
     {
-        if (isPaused && audioSource.clip == playerOneTheme || isPaused && audioSource.clip == playerTwoTheme)
-            hypeMusicLastTime = audioSource.time;
-        if (players[0].IsHyped)
-            SetPlayerTheme(playerOneTheme);
-        else if (players[1].IsHyped)
-            SetPlayerTheme(playerTwoTheme);
+        bool playerOneIsHyped = players[0].IsHyped;
+        bool playerTwoIsHyped = players[1].IsHyped;
 
+        if (playerOneIsHyped && !playerOneWasHyped)
+        {
+            SetPlayerTheme(playerOneTheme, true);
+        }
+        else if (playerTwoIsHyped && !playerTwoWasHyped)
+        {
+            SetPlayerTheme(playerTwoTheme, true);
+        }
+
+        playerOneWasHyped = playerOneIsHyped;
+        playerTwoWasHyped = playerTwoIsHyped;
     }
-    //Stage Theme
+
     private void StageTheme()
     {
-        if (!players[0].IsHyped && !players[1].IsHyped && !isPaused && !isMatchOver)
+        if (
+            players[0].IsHyped ||
+            players[1].IsHyped ||
+            isPaused ||
+            MainGameManager.Instance.IsMatchOver
+        )
         {
-            if (BGMLastTime > 0.0f)
-            {
-                if (audioSource.clip != stageTheme)
-                {
-                    audioSource.volume = 0.5f;
-                    audioSource.clip = stageTheme;
-                    audioSource.time = BGMLastTime;
-                    audioSource.Play();
-                }
-                else
-                {
-                    audioSource.volume = 0.5f;
-                    if (!audioSource.isPlaying)
-                        audioSource.Play();
+            if (musicSource.clip == stageTheme)
+                BGMLastTime = musicSource.time;
 
-                }
-            }
-            else if (!audioSource.isPlaying)
-            {
-                audioSource.volume = 0.5f;
-                audioSource.Play();
-            }
+            return;
         }
-        if (audioSource.clip == stageTheme && isMatchOver ||
-            audioSource.clip == stageTheme && players[0].IsHyped ||
-            audioSource.clip == stageTheme && players[1].IsHyped ||
-            audioSource.clip == stageTheme && isPaused)
-            BGMLastTime = audioSource.time;
-    }
-    private void SetPlayerTheme(AudioClip AudioClip)
-    {
-        audioSource.clip = AudioClip;
-        audioSource.volume = 1.0f;
-        if (hypeMusicLastTime > 0.0f)
+
+        if (musicSource.clip != stageTheme)
         {
-            audioSource.time = hypeMusicLastTime;
-            if (!audioSource.isPlaying)
-                audioSource.Play();
-            hypeMusicLastTime = 0.0f;
+            musicSource.Stop();
+            musicSource.clip = stageTheme;
+            musicSource.volume = 0.5f;
+            musicSource.loop = true;
+            musicSource.time = BGMLastTime;
+            musicSource.Play();
         }
-        else if (!audioSource.isPlaying)
-            audioSource.Play();
+        else if (!musicSource.isPlaying)
+        {
+            musicSource.volume = 0.5f;
+            musicSource.loop = true;
+            musicSource.Play();
+        }
     }
+
     private void GetHypeMusic()
     {
         players = new Player[2];
 
-        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+        foreach (GameObject playerObject in GameObject.FindGameObjectsWithTag("Player"))
         {
-            if (player.GetComponent<Player>().ID == 1)
+            Player player = playerObject.GetComponent<Player>();
+            AudioManager playerAudio = playerObject.GetComponent<AudioManager>();
+
+            if (player == null || playerAudio == null)
+                continue;
+
+            if (player.ID == 1)
             {
-                players[0] = player.GetComponent<Player>();
-                playerOneTheme = player.GetComponent<AudioManager>().hypeMusic;
-                //playersTheme[0] = player.GetComponent<AudioManager>();
+                players[0] = player;
+                playerOneTheme = playerAudio.hypeMusic;
             }
             else
             {
-                players[1] = player.GetComponent<Player>();
-                playerTwoTheme = player.GetComponent<AudioManager>().hypeMusic;
-                // playersTheme[1] = player.GetComponent<AudioManager>();
+                players[1] = player;
+                playerTwoTheme = playerAudio.hypeMusic;
             }
-
-            //rounds = 0;
-
-        }
-    }
-    private void MatchSet()
-    {
-        if (isMatchOver)
-        {
-            if (isPlayerOneVictory)
-                audioSource.clip = playerOneTheme;
-            else
-                audioSource.clip = playerTwoTheme;
-            StartCoroutine("MatchSetDelay");
-
-
-            //Wait X seconds
-
         }
     }
 }
