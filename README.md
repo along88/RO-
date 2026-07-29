@@ -58,4 +58,4 @@ The current build supports complete matches, rematches,character-specific attack
 5. Enter Play Mode.
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/along88/RO-
