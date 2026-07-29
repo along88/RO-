@@ -82,8 +82,7 @@ Do not remove the executable from its accompanying files or run it directly from
 4. Open the Main Menu scene.
 5. Enter Play Mode.
 
-```bash
-git clone https://github.com/along88/RO-.git```
+git clone https://github.com/along88/RO-.git
 Using a significantly different Unity version may trigger package, scene, prefab, or asset upgrades.
 
 ## Repository Branches
