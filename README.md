@@ -1,6 +1,6 @@
 # Ring Out!
 
-A Unity arena-fighting game prototype featuring local matches, momentum-based combat, character-specific hype themes, ring-outs, and best-of-three match sets.
+A Unity arena-fighting game prototype featuring local multiplayer matches, momentum-based combat, character-specific attacks, hype themes, ring-outs, and best-of-three match sets.
 
 ## Project Status
 
@@ -8,13 +8,14 @@ A Unity arena-fighting game prototype featuring local matches, momentum-based co
 **Status:** Active development / playable prototype  
 **Engine:** Unity 2019.2.0f1
 
-The current build supports complete matches, rematches,character-specific attacks and special attacks, character-specific music, menu navigation, victory sequences, and scene transitions.
+The current build supports complete matches, rematches, character-specific attacks and special attacks, character-specific music, menu navigation, victory sequences, and scene transitions.
 
 ## Current Features
 
-- local multiplayer game modes
+- Local multiplayer game mode
 - Best-of-three match sets
 - Ring-out and momentum-based victories
+- Character-specific attacks and special attacks
 - Character-specific hype music
 - Full-match victory themes
 - Blocking, dashing, stamina, and attack systems
@@ -26,7 +27,7 @@ The current build supports complete matches, rematches,character-specific attack
 
 ### v0.2.1
 
-- Restored character hype music
+- Restored character-specific hype music
 - Added winner theme playback after a full match-set victory
 - Separated menu sound effects from background music
 - Added a dedicated UI audio manager
@@ -47,9 +48,33 @@ The current build supports complete matches, rematches,character-specific attack
 | Menu navigation | Configured `NavV2` axis |
 | Confirm | Return / configured `Submit` input |
 | Pause | Configured pause input |
-| Player controls | See the in-game controls or project Input Manager |
+| Player controls | See the in-game controls or Unity Input Manager |
 
-## Running the Project
+## Downloading the Game
+
+Playable builds are available from the repository's **Releases** page.
+
+For Windows, download the installer or portable build associated with the latest release.
+
+### Windows Installer
+
+1. Download the latest `RingOut-Setup.exe` release asset.
+2. Run the installer.
+3. Follow the installation prompts.
+4. Launch Ring Out! from the installed shortcut.
+
+Because the project is independently distributed and may not yet be digitally signed, Windows may display an unknown-publisher warning.
+
+### Portable Build
+
+1. Download the Windows portable ZIP.
+2. Extract the complete ZIP.
+3. Keep the executable, DLL files, and `_Data` folder together.
+4. Run `RingOutProject.exe`.
+
+Do not remove the executable from its accompanying files or run it directly from inside the ZIP.
+
+## Running the Unity Project
 
 1. Clone the repository.
 2. Open the project using Unity `2019.2.0f1`.
@@ -58,4 +83,4 @@ The current build supports complete matches, rematches,character-specific attack
 5. Enter Play Mode.
 
 ```bash
-git clone https://github.com/along88/RO-
+git clone https://github.com/along88/RO-.git
