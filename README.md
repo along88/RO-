@@ -84,3 +84,68 @@ Do not remove the executable from its accompanying files or run it directly from
 
 ```bash
 git clone https://github.com/along88/RO-.git
+Using a significantly different Unity version may trigger package, scene, prefab, or asset upgrades.
+
+## Repository Branches
+
+- `master` contains tested milestone versions.
+- `develop` contains the current integrated development version.
+- New work should be developed in temporary `feature/*` branches created from `develop`.
+
+## Releases
+
+Versioned milestones are available from the repository's **Releases** page.
+
+Release packages may include:
+
+- Windows installer
+- Portable Windows build
+- Game manual
+- Release notes
+- Automatically generated source-code archives
+
+GitHub's automatically generated source-code ZIP and TAR files contain the Unity project source. They are not standalone playable builds.
+
+## Credits
+
+| Role | Contributor |
+|---|---|
+| Executive Producer | Miguel Bugarin |
+| Lead Game Designer | Alfred Long |
+| Lead Programmer | Alfred Long |
+| Programmer | Josh Mond |
+| Lead 3D Artist | Shawn Latini |
+| Lead VFX Artist | Alfred Long |
+| Lead Audio Designer | Alfred Long |
+| Lead QA | Alfred Long |
+| QA | Miguel Bugarin |
+
+### Original Music
+
+Featuring original music by:
+
+- **Alberto “Birdie” Velazquez**
+- **Hutch The Rad**
+
+Ring Out! was created through the combined production, design, programming, art, visual effects, audio, and quality-assurance contributions of the people listed above.
+
+## Development Notes
+
+Ring Out! is an older Unity project currently undergoing restoration, debugging, and modernization.
+
+Some code and assets retain their original project structure while major systems are gradually being separated into clearer responsibilities.
+
+Current refactoring priorities include:
+
+- Audio-system separation
+- Menu and navigation architecture
+- Match-state management
+- Scene lifecycle reliability
+- Fighter and animation cleanup
+- General code maintainability
+
+## License
+
+No license has currently been specified.
+
+Unless a license is added, the source code, music, artwork, game assets, and other project materials should not be assumed to be available for reuse, modification, or redistribution.
