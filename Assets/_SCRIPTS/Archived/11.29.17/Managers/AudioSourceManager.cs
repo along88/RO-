@@ -147,9 +147,7 @@ public class AudioSourceManager : Manager
         if (
             players[0].IsHyped ||
             players[1].IsHyped ||
-            isPaused ||
-            MainGameManager.Instance.IsMatchOver
-        )
+            isPaused || MainGameManager.Instance.IsMatchOver)
         {
             if (musicSource.clip == stageTheme)
                 BGMLastTime = musicSource.time;

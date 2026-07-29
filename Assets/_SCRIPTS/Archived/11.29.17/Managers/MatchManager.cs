@@ -12,7 +12,7 @@ class MatchManager: Manager
 {
     [SerializeField]
     private Sprite[] PlayerIcon;
-    
+    private bool matchSetDelayStarted;
     private Vector3 cameraPosition;
     private Camera matchSetcamera;
     private Camera mainCamera;
@@ -260,41 +260,43 @@ class MatchManager: Manager
             if (players[0].IsHypeHit)
             {
                 ringOut.enabled = true;
-
                 MainGameManager.Instance.IsPlayerOneVictory = false;
                 MainGameManager.Instance.IsMatchOver = true;
             }
             else if (players[1].IsHypeHit)
             {
-
                 ringOut.enabled = true;
-
                 MainGameManager.Instance.IsPlayerOneVictory = true;
                 MainGameManager.Instance.IsMatchOver = true;
-
             }
-            if (players[0].transform.position.y < playerBounds.transform.position.y)
+            else if (
+                players[0].transform.position.y <
+                playerBounds.transform.position.y
+            )
             {
-
                 ringOut.enabled = true;
-
                 MainGameManager.Instance.IsPlayerOneVictory = false;
                 MainGameManager.Instance.IsMatchOver = true;
-
             }
-            else if (players[1].transform.position.y < playerBounds.transform.position.y)
+            else if (
+                players[1].transform.position.y <
+                playerBounds.transform.position.y
+            )
             {
                 ringOut.enabled = true;
                 MainGameManager.Instance.IsPlayerOneVictory = true;
                 MainGameManager.Instance.IsMatchOver = true;
             }
+        }
 
-        }
-        else
+        if (
+            MainGameManager.Instance.IsMatchOver &&
+            !matchSetDelayStarted
+        )
         {
-            StartCoroutine("MatchSetDelay", 0);
+            matchSetDelayStarted = true;
+            StartCoroutine(MatchSetDelay());
         }
-        
     }
     private IEnumerator MatchSetDelay()
     {
@@ -331,12 +333,17 @@ class MatchManager: Manager
 
         if (MainGameManager.Instance.PlayerVictories[player] >= 1)
         {
-            // This player already had one win, so this is their second.
+            // This round ended.
             MainGameManager.Instance.IsMatchOver = true;
+
+            // This player has now won the complete set.
+            MainGameManager.Instance.IsMatchSetOver = true;
+            MainGameManager.Instance.WinningPlayerId = player + 1;
             MainGameManager.Instance.IsPlayerOneVictory = player == 0;
 
             Debug.Log(
-                $"Full match over. Winner: Player {player + 1}"
+                $"Full match set over. Winner: Player " +
+                $"{MainGameManager.Instance.WinningPlayerId}"
             );
 
             MatchSetNavigation();
